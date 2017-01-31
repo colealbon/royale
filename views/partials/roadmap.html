@@ -1,0 +1,26 @@
+<span class="roadmap">
+    <details>
+    <summary>road map</summary>
+    <ul>
+        <li><del><a href="https://github.com/colealbon/hotlips/commit/3b70981cbe4e11e1400ae8e948a06e3582d9c2d2">Install node/koa/webpack</a></del></li>
+        <li><del><a href="https://github.com/colealbon/hotlips/issues/2">Install gundb</a></del></li>
+        <li><del>make a <a href="#/deck">deck</a> of cards</del></li>
+        <li><del>Alice and Bob <a href="#/message">identify</a></del></li>
+        <li><del>Alice and Bob <a href="#/connect">connect</a></del></li>
+        <li><del>Alice and Bob <a href="https://github.com/colealbon/streamliner">exchange keys</a></del?</li>
+        <li>Alice and Bob agree on a certain "<a href="#/deck">deck</a>" of cards. In practice, this means they agree on a set of numbers or other data such that each element of the set represents a card.</li>
+        <li>Alice picks an encryption key A and uses this to encrypt each card of the deck.</li>
+        <li>Alice <a href="https://bost.ocks.org/mike/shuffle/">shuffles</a> the cards.</li>
+        <li>Alice passes the encrypted and shuffled deck to Bob. With the encryption in place, Bob cannot know which card is which.</li>
+        <li>Bob shuffles the deck.</li>
+        <li>Bob passes the double encrypted and shuffled deck back to Alice.</li>
+        <li>Alice decrypts each card using her key A. This still leaves Bob's encryption in place though so she cannot know which card is which.</li>
+        <li>Alice picks one encryption key for each card (A1, A2, etc.) and encrypts them individually.</li>
+        <li>Alice passes the deck to Bob.</li>
+        <li>Bob decrypts each card using his key B. This still leaves Alice's individual encryption in place though so he cannot know which card is which.</li>
+        <li>Bob picks one encryption key for each card (B1, B2, etc.) and encrypts them individually.</li>
+        <li>Bob passes the deck back to Alice.</li>
+        <li>Alice publishes the deck for everyone playing (in this case only Alice and Bob, see below on expansion though).</li>
+    </ul>
+</details>
+</span>

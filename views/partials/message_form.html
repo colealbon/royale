@@ -1,0 +1,25 @@
+<form
+    id="message_form"
+    onsubmit="
+     var gun = Gun(location.origin + '/gun');
+     openpgp.config.aead_protect = true
+     openpgp.initWorker({ path:'/js/openpgp.worker.js' })
+     window.handlePost(message_txt.value)(openpgp)(window.localStorage)(gun).then(result => {if (result) {console.log(result)}});document.getElementById('message_txt').value = ''; return false"
+    method="post"
+    action="/message">
+    <input id="message_form_input"
+        type="submit"
+        value="post message"
+        form="message_form"
+        >
+</form>
+<textarea
+    id="message_txt"
+    name="message_txt"
+    form="message_form"
+    rows=51
+    cols=70
+    placeholder="paste plaintext message, public key, or private key"
+    style="font-family:Menlo,Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;"
+    >
+</textarea>

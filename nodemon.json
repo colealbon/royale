@@ -1,0 +1,4 @@
+{
+  "verbose": true,
+  "ignore": [ "./gun.data.json", "./npm-debug.log", "public/js/*" ]
+}

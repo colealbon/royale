@@ -1,0 +1,36 @@
+{% block nav %}
+<span id="nav">
+    <nav>
+        <a href="/roadmap">Roadmap</a> |
+        <a href="/contact">Contact</a> |
+        <a href="/message">Message</a> |
+        <a href="/deck">Deck</a> |
+        <a href="/connect">Connect</a>
+    </nav>
+</span>
+<rebel-router>
+    <rebel-route path="/index" component="index-page"></rebel-route>
+    <rebel-route path="/roadmap" component="roadmap-page"></rebel-route>
+    <rebel-route path="/contact" component="contact-page"></rebel-route>
+    <rebel-route path="/message" component="message-page"></rebel-route>
+    <rebel-route path="/deck" component="deck-page"></rebel-route>
+    <rebel-route path="/connect" component="connect-page"></rebel-route>
+</rebel-router>
+<script>
+   // if imports are supported, then point urls to client side routing.
+   // if webcomponent polyfill is present, then this code could be just the
+   // navtext = .... line (which is still needed for lynx and mocha browsers.)
+   function supportsImports() {
+     return 'import' in document.createElement('link');
+   }
+   if (supportsImports()) {
+       // this regex is brittle, should validate and clean up better
+       var navtxt =  document.getElementById("nav").innerHTML
+       .replace(/href=\"/g,'href="/#')
+       .replace(/xindexx/g,'')
+       setTimeout(function() {
+           document.getElementById("nav").innerHTML = navtxt;
+       },0)
+   }
+</script>
+{% endblock %}
