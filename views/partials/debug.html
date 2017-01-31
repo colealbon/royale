@@ -1,0 +1,23 @@
+{% block debug %}
+<div style="visibility:visible" >
+    <details>
+        <summary>status</summary>
+        <ul id="debug">
+            <li>app name: <span id="app_name" class="app_name">{{app_name}}</span></li>
+            <li>ip_local: <span id="ip_local" class="ip_local">{{ip_local}}</span></li>
+            <li>ip_external: <span id="ip_external" class="ip_external">{{ip_external}}</span></li>
+            <li>port: <span id="port" class="port">{{port}}</span></li>
+            <li>gun: <span id="gun_data" class="gun_data">pending gun</span></li>
+            <li>server_pubkey_url: <span id="server_pubkey_url" class="server_pubkey_url"><a href="{{server_pubkey_url}}">{{server_pubkey_url}}</a></span></li>
+        </ul>
+    </details>
+    <details>
+    <summary>{{ recipient_userid }}</summary>
+        <pre>
+            <div id="recipient_pubkey_txt" class="recipient_pubkey_txt">
+{{ recipient_pubkey_txt }}
+            </div>
+        </pre>
+    </details>
+</div>
+{% endblock %}

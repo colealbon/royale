@@ -1,0 +1,26 @@
+{
+  "name": "hotlips",
+  "description": "practice",
+  "main": "app.js",
+  "authors": [
+    "Cole B. Albon"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "koa2",
+    "rebel-router",
+    "webpack",
+    "babel"
+  ],
+  "homepage": "https://github.com/colealbon/hotlips",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "webcomponentsjs": "^0.7.23"
+  }
+}

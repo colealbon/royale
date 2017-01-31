@@ -1,0 +1,12 @@
+<head>
+    <meta charset="UTF-8">
+    <title>hotlips</title>
+    <script src="js/openpgp.js"></script>
+    <script src="js/hotlips.js"></script>
+    <script>
+        openpgp.initWorker({ path:'js/openpgp.worker.js' })
+        // set the relative web worker path
+        openpgp.config.aead_protect = true
+        // activate fast AES-GCM mode (not yet OpenPGP standard)
+    </script>
+</head>
