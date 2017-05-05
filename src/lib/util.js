@@ -1,20 +1,63 @@
-"use strict";
+'use strict';
+
+const classifyKeyType = (content) => {
+    return (!content) ?
+    Promise.reject('Error: mising pgpKey'):
+    (openpgp) => {
+        return (!openpgp) ?
+        Promise.reject('Error: missing openpgp'):
+        new Promise((resolve, reject) => {
+            try {
+                let privateKeys = openpgp.key.readArmored(content)
+                let privateKey = privateKeys.keys[0]
+                if (privateKey.toPublic().armor() !== privateKey.armor() ) {
+                    resolve('PGPPrivkey');
+                } else {
+                    resolve('PGPPubkey');
+                }
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+}
+// export function processCleartext(content) {
+//     // usage: classifyContent(content)(openpgp).then(result => result)
+//     return (!content) ?
+//     Promise.resolve(''):
+//     (openpgp) => {
+//         return (!openpgp) ?
+//         Promise.reject('Error: missing openpgp'):
+//         new Promise((resolve, reject) => {
+//             let possiblepgpkey = openpgp.key.readArmored(content);
+//             if (possiblepgpkey.keys[0]) {
+//                 return classifyKeyType(possiblepgpkey)(openpgp)();
+//             } else {
+//                 try {
+//                     openpgp.message.readArmored(content);
+//                     resolve('PGPMessage');
+//                 } catch (err) {
+//                     resolve('cleartext');
+//                 }
+//             }
+//         })
+//     }
+// }
 
 export function classifyContent(content) {
     // usage: classifyContent(content)(openpgp).then(result => result)
     return (!content) ?
-    Promise.reject('Error: missing content'):
-    function(openpgp) {
+    Promise.resolve(''):
+    (openpgp) => {
         return (!openpgp) ?
         Promise.reject('Error: missing openpgp'):
-        new Promise(function(resolve, reject) {
+        new Promise((resolve, reject) => {
             let possiblepgpkey = openpgp.key.readArmored(content);
             if (possiblepgpkey.keys[0]) {
-                resolve(
-                    (possiblepgpkey.keys[0].toPublic().armor() !== possiblepgpkey.keys[0].armor()) ?
-                    'PGPPrivkey' :
-                    'PGPPubkey'
-                )
+                classifyKeyType(content)(openpgp)
+                .then((keyType) => {
+                    resolve(keyType);
+                });
             } else {
                 try {
                     openpgp.message.readArmored(content);
@@ -26,14 +69,15 @@ export function classifyContent(content) {
         })
     }
 }
+
 function getFromStorage(localStorage) {
     // usage: savePGPkey(content)(openpgp)(localStorage).then(result => result)
     return (!localStorage) ?
     Promise.reject('Error: missing localStorage'):
-    function(indexKey) {
+    (indexKey) => {
         return (!indexKey) ?
         // no index -> return everything
-        new Promise(function(resolve, reject) {
+        new Promise((resolve, reject) => {
             try {
                 let i = localStorage.length
                 let keyArr = []
@@ -50,7 +94,7 @@ function getFromStorage(localStorage) {
             }
         }):
         // index provided -> return one
-        new Promise(function(resolve, reject) {
+        new Promise((resolve, reject) => {
             try {
                 resolve(localStorage.getItem(indexKey))
             }
@@ -65,13 +109,13 @@ function savePGPPubkey(PGPkeyArmor) {
     // usage: savePGPPubkey(content)(openpgp)(localStorage).then(result => result)
     return (!PGPkeyArmor) ?
     Promise.reject('Error: missing PGPkeyArmor'):
-    function(openpgp) {
+    (openpgp) => {
         return (!openpgp) ?
         Promise.reject('Error: missing openpgp'):
-        function(localStorage) {
+        (localStorage) => {
             return (!localStorage) ?
             Promise.reject('Error: missing localStorage'):
-            new Promise(function(resolve, reject) {
+            new Promise((resolve, reject) => {
                 let PGPkey = openpgp.key.readArmored(PGPkeyArmor);
                 getFromStorage(localStorage)(PGPkey.keys[0].users[0].userId.userid)
                 .then(existingKey => {
@@ -87,6 +131,7 @@ function savePGPPubkey(PGPkeyArmor) {
                         resolve(`public pgp key saved <- ${PGPkey.keys[0].users[0].userId.userid}`)
                     }
                 })
+                .catch((err) => reject(err))
             })
         }
     }
@@ -96,38 +141,43 @@ function savePGPPrivkey(PGPkeyArmor) {
     // usage: savePGPPrivkey(content)(openpgp)(localStorage).then(result => result)
     return (!PGPkeyArmor) ?
     Promise.reject('Error: missing PGPkeyArmor'):
-    function(openpgp) {
+    (openpgp) => {
         return (!openpgp) ?
         Promise.reject('Error: missing openpgp'):
-        function(localStorage) {
+        (localStorage) => {
             return (!localStorage) ?
             Promise.reject('Error: missing localStorage'):
-            new Promise(function(resolve, reject) {
-                let PGPkey = openpgp.key.readArmored(PGPkeyArmor);
-                localStorage.setItem(PGPkey.keys[0].users[0].userId.userid, PGPkeyArmor)
-                process.setImmediate(
-                    resolve(`private pgp key saved <- ${PGPkey.keys[0].users[0].userId.userid}`)
-                )
+            new Promise((resolve, reject) => {
+                try {
+                    let PGPkey = openpgp.key.readArmored(PGPkeyArmor);
+                    localStorage.setItem(PGPkey.keys[0].users[0].userId.userid, PGPkeyArmor)
+                    process.setImmediate(
+                        resolve(`private pgp key saved <- ${PGPkey.keys[0].users[0].userId.userid}`)
+                    )
+                } catch(err) {
+                    reject(err);
+                }
             })
         }
     }
 }
 export function encryptClearText(openpgp) {
-//  usage: encryptClearText(openpgp)(publicKeyArmor)(cleartext).then(result => result)
+// usage: encryptClearText(openpgp)(publicKeyArmor)(cleartext).then(result => result)
     return (!openpgp) ?
     Promise.reject('Error: missing openpgp'):
-    function(publicKeyArmor) {
+    (publicKeyArmor) => {
         return (!publicKeyArmor) ?
         Promise.reject('Error: missing public key'):
-        function(cleartext) {
+        (cleartext) => {
             return (!cleartext) ?
             Promise.reject('Error: missing cleartext'):
-            new Promise(function(resolve, reject) {
+            new Promise((resolve, reject) => {
                 let PGPPubkey = openpgp.key.readArmored(publicKeyArmor)
                 openpgp.encryptMessage(PGPPubkey.keys[0], cleartext)
                 .then(encryptedtxt => {
                     resolve(encryptedtxt)
                 })
+                .catch((err) => reject(err))
             })
         }
     }
@@ -136,27 +186,35 @@ export function decryptPGPMessageWithKey(PGPMessageArmor) {
 //  usage: decryptPGPMessageWithKey(content)(openpgp)(privateKeyArmor)(password).then(result => result)
     return (!PGPMessageArmor) ?
     Promise.reject('Error: missing PGPMessage'):
-    function(openpgp) {
+    (openpgp) => {
         return (!openpgp) ?
         Promise.reject('Error: missing openpgp'):
-        function(privateKeyArmor) {
+        (privateKeyArmor) => {
             return (!privateKeyArmor) ?
             Promise.reject('Error: missing privateKeyArmor'):
-            function(password) {
+            (password) => {
                 return (!password) ?
                 Promise.reject('Error: missing password'):
-                new Promise(function(resolve, reject) {
-                    let privateKeys = openpgp.key.readArmored(privateKeyArmor)
-                    var privateKey = privateKeys.keys[0]
-                    privateKey.decrypt(password)
-                    let message = openpgp.message.readArmored(PGPMessageArmor)
-                    return (!openpgp.decrypt) ?
-                    openpgp.decryptMessage(privateKey, message)
-                    .then(result => resolve(result))
-                    .catch() :
-                    openpgp.decrypt({message: message, privateKey: privateKey})
-                    .then(result => resolve(result.data))
-                    .catch() ;
+                new Promise((resolve, reject) => {
+                    try {
+                        let privateKeys = openpgp.key.readArmored(privateKeyArmor)
+                        let privateKey = privateKeys.keys[0]
+                        privateKey.decrypt(password)
+                        let message = openpgp.message.readArmored(PGPMessageArmor)
+                        return (!openpgp.decrypt) ?
+                        openpgp.decryptMessage(privateKey, message)
+                        .then(result => {
+                            resolve(result);
+                            }
+                        ):
+                        openpgp.decrypt({ 'message': message, 'privateKey': privateKey })
+                        .then(result => {
+                            resolve(result.data);
+                        });
+                    } catch(err) {
+                        //resolve();
+                        reject(err);
+                    }
                 })
             }
         }
@@ -166,27 +224,33 @@ export function decryptPGPMessage(PGPMessageArmor) {
 //  usage: decryptPGPMessage(content)(openpgp)(localStorage)(password).then(result => result)
     return (!PGPMessageArmor) ?
     Promise.reject('Error: missing PGPMessage'):
-    function(openpgp) {
+    (openpgp) => {
         return (!openpgp) ?
         Promise.reject('Error: missing openpgp'):
-        function(localStorage) {
+        (localStorage) => {
             return (!localStorage) ?
             Promise.reject('Error: missing localStorage'):
-            function(password) {
+            (password) => {
                 return (!password) ?
                 Promise.reject("Error: missing password"):
-                new Promise(function(resolve, reject) {
+                new Promise((resolve, reject) => {
                     getFromStorage(localStorage)().then(storeArr => {
-                        return storeArr
-                        .filter(storeItem => (!storeItem) ? false : true)
-                        .map(storeItem => classifyContent(storeItem)(openpgp)
-                            .then(contentType => {
-                                if (contentType === 'PGPPrivkey') {
-                                    decryptPGPMessageWithKey(PGPMessageArmor)(openpgp)(storeItem)('hotlips')
-                                    .then(decrypted => resolve(decrypted))
-                                }
-                            })
-                        )
+                        try {
+                            return storeArr
+                            .filter(storeItem => (!storeItem) ? false : true)
+                            .map(storeItem => classifyContent(storeItem)(openpgp)
+                                .then(contentType => {
+                                    if (contentType === 'PGPPrivkey') {
+                                        decryptPGPMessageWithKey(PGPMessageArmor)(openpgp)(storeItem)('hotlips')
+                                        .then(decrypted => {
+                                            resolve(decrypted);
+                                        })
+                                    }
+                                })
+                            )
+                        } catch(err) {
+                            reject(err);
+                        }
                     })
                 })
             }
@@ -194,14 +258,15 @@ export function decryptPGPMessage(PGPMessageArmor) {
     }
 }
 export function handlePost(content) {
+    //console.log(`handlePost <- ${content}`);
     return (!content) ?
-    Promise.reject('Error: missing content') :
-    function(openpgp) {
+    Promise.resolve('') :
+    (openpgp) => {
         return (!openpgp) ?
         Promise.reject('Error: missing openpgp'):
-        function(localStorage) {
-            return function(password) {
-                return new Promise(function(resolve, reject) {
+        (localStorage) => {
+            return (password) => {
+                return new Promise((resolve, reject) => {
                     classifyContent(content)(openpgp)
                     .then(contentType => {
                         if (contentType === 'cleartext') {
@@ -221,11 +286,16 @@ export function handlePost(content) {
                         }
                         if (contentType === 'PGPMessage') {
                             // get PGPKeys, decrypt,  and return
-                            return decryptPGPMessage(content)(openpgp)(localStorage)('hotlips')
-                            .then(result => result)
+                            return decryptPGPMessage(content)(openpgp)(localStorage)(password)
+                            .then(result => {
+                                return result
+                            })
                         }
                     })
-                    .then(result => resolve(result))
+                    .then(result => {
+                        resolve(result)
+                    })
+                    .catch((err) => reject(err))
                 })
             }
         }

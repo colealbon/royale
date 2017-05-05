@@ -1,10 +1,10 @@
 {
-  "name": "hotlips",
+  "name": "royale",
   "version": "1.0.0",
   "description": "practice",
   "main": "server.js",
   "scripts": {
-    "webpack": "webpack; cp dist/hotlips.js public/js/hotlips.js;",
+    "webpack": "webpack; cp dist/royale.js public/js/royale.js;",
     "openpgp": "cp node_modules/openpgp/dist/openpgp.js public/js/openpgp.js; cp node_modules/openpgp/dist/openpgp.worker.js public/js/openpgp.worker.js",
     "postinstall": "mkdir -p public/js; npm run webpack; npm run openpgp;",
     "start": "node bin/www",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/colealbon/hotlips.git"
+    "url": "git+https://github.com/colealbon/royale.git"
   },
   "keywords": [
     "koa2",
@@ -23,13 +23,13 @@
   "author": "Cole B. Albon",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/colealbon/hotlips/issues"
+    "url": "https://github.com/colealbon/royale/issues"
   },
-  "homepage": "https://github.com/colealbon/hotlips#readme",
+  "homepage": "https://github.com/colealbon/royale#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
     "fs": "0.0.1-security",
-    "gun": "git://github.com/amark/gun.git#0.5",
+    "gun": "^0.6.3",
     "koa": "^2.0.0-alpha.7",
     "koa-body": "^2.0.0",
     "koa-bodyparser": "^3.2.0",
@@ -45,8 +45,9 @@
   },
   "devDependencies": {
     "babel": "^6.5.2",
-    "babel-cli": "^6.18.0",
+    "babel-cli": "^6.24.0",
     "babel-core": "^6.18.2",
+    "babel-eslint": "^7.1.1",
     "babel-loader": "^6.2.7",
     "babel-plugin-async-to-promises": "^1.0.5",
     "babel-plugin-transform-async-functions": "^6.8.0",
@@ -57,12 +58,15 @@
     "cheerio": "^0.22.0",
     "dom-storage": "^2.0.2",
     "dstructs-array": "^1.0.1",
+    "eslint": "^3.17.1",
+    "istanbul": "^0.4.5",
     "jsdom": "^9.8.3",
     "mocha": "^3.1.2",
     "mocha-jsdom": "^1.1.0",
     "node-fetch": "^1.6.3",
     "nodemon": "^1.11.0",
     "nwglobal": "0.0.2",
-    "webpack": "^1.13.3"
+    "webpack": "^1.13.3",
+    "winston": "^2.3.1"
   }
 }

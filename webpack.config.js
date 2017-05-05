@@ -1,7 +1,8 @@
 module.exports = {
     context: __dirname,
+    devtool: 'inline-source-map',
     entry: {
-        hotlips: './src/index.js'
+        royale: './src/index.js'
     },
     output: {
         path: __dirname + '/dist',

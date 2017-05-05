@@ -4,7 +4,7 @@ const fs = require('fs');
 const memoize = require('memoizee');
 const util = require(__dirname + '/../src/lib/util.js');
 
-var openpgp = require('../test/openpgp162/openpgp.js');
+const openpgp = require('../test/openpgp162/openpgp.js');
 
 const slow_get_server_privkey = function slow_get_server_pubkey() {
     return fs.readFileSync(config.server_privkey_file, "utf8")
@@ -55,21 +55,25 @@ router.get('/', async (ctx, next) => {
 router.post('/', async (ctx, next) => {
     //console.log('11111111', ctx.request.body)
     const postedContent = await JSON.stringify(ctx.request.body);
-    const msg_txt = await JSON.parse(postedContent).message_txt
-    const classification = await util.classifyContent(msg_txt)(openpgp);
-    // console.log(classification)
-    // console.log(classification);
-    // const privkey_txt = await get_server_privkey();
-    // const cleaned_privkey = await clean_content(privkey_txt);
-    // var decrypted_txt;
-    // try {
-    //     decrypted_txt = await decrypt_content(cleaned_privkey, cleaned_txt)
-    // }
-    // catch (err) {
-    //     //console.log(err);
-    // }
-    // console.log(decrypted_txt);
-    // const client_userid = await get_user_from_pubkey(decrypted_txt);
+    const msgTxt = await JSON.parse(postedContent).message_txt
+    if (msgTxt !== '') {
+        const classification = await util.classifyContent(msgTxt)(openpgp);
+        console.log(classification);
+
+        // const privkey_txt = await get_server_privkey();
+        // const cleaned_privkey = await clean_content(privkey_txt);
+        // var decrypted_txt;
+        // try {
+        //     decrypted_txt = await decrypt_content(cleaned_privkey, cleaned_txt)
+        // }
+        // catch (err) {
+        //     //console.log(err);
+        // }
+        // console.log(decrypted_txt);
+        // const client_userid = await get_user_from_pubkey(decrypted_txt);
+    }
+
+
     return ctx.render('message', {
         app_name: config.app_name
         //client_userid: client_userid,

@@ -1,3 +1,6 @@
+'use strict';
+/*eslint-env es6 */
+
 const Koa = require('koa');
 const app = new Koa();
 const router = require('koa-router')();
@@ -33,19 +36,18 @@ const connect = require('./routes/connect');
 router.use('/connect', connect.routes());
 
 app.use(koaBodyParser({
-    detectJSON: function (ctx) {
+    detectJSON: (ctx) => {
         return /\.json$/i.test(ctx.path);
         }
 }))
-app.use(async function(ctx, next) {
+.use(async (ctx, next) => {
     return next();
 })
-//.use(router.routes());
-.use(router.routes(), router.allowedMethods());
+.use(router.routes());
+//.use(router.routes(), router.allowedMethods());
 
-
-app.on('error', function(err, ctx){
-  console.log('server error', err, ctx);
+app.on('error', (err, ctx) => {
+    logger.error('server error', err, ctx);
 });
 
 module.exports = app;
