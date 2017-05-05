@@ -1,9 +1,11 @@
+'use strict';
 //import 'webcomponents.js/webcomponents.js';
 //uncomment line above to double app size and support ios.
 
 // helper functions
 import * as util from './lib/util';
 window.handlePost = util.handlePost;
+
 // window.handleContent = util.handleContent;
 // window.isPGPPubkey   = util.isPGPPubkey;
 // window.isPGPPrivkey  = util.isPGPPrivkey;

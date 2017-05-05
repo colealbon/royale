@@ -50,7 +50,7 @@ suite('landing page', function() {
             return res.text();
         }).then(function(body) {
             const cheers = cheerio.load(body)
-            assert.equal(cheers('.app_name').text(), 'hotlips')
+            assert.equal(cheers('.app_name').text(), 'royale')
         });
     });
     test('ip_local should exist', function() {

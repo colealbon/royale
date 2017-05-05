@@ -15,17 +15,17 @@ const config = require(__dirname + '/../config/options.js');
 const fs = require('fs');
 const path = require('path');
 
-var Gun = require('gun');
-var gun = Gun({
-    file: 'gun.data.json'
-});
+// var Gun = require('gun');
+// var gun = Gun({
+//     file: 'gun.data.json'
+// });
 
 var openpgp = require('../test/openpgp162/openpgp.js');
 // LAUNCH HTTP SERVER
 var port = normalizePort(process.env.PORT || config.port || '3000');
 var server = http.createServer(app.callback());
 
-gun.wsp(server);
+//gun.wsp(server);
 
 //console.log('HTTP Server started on port ' + port);
 server.listen(port);
