@@ -1,0 +1,48 @@
+{
+  "graph": {
+    "L0LW3L9cxn8L7hc2yLLEwJNR": {
+      "_": {
+        ">": {
+          "hello": 1494047171989.65
+        },
+        "#": "L0LW3L9cxn8L7hc2yLLEwJNR"
+      },
+      "hello": "world"
+    },
+    "#sampledata#": {
+      "_": {
+        ">": {
+          "L0LW3L9cxn8L7hc2yLLEwJNR": 1494047172000.015,
+          "46Frjh9xbLr2rD2rj7AB2jqz": 1494047182379.81
+        },
+        "#": "#sampledata#"
+      },
+      "L0LW3L9cxn8L7hc2yLLEwJNR": {
+        "#": "L0LW3L9cxn8L7hc2yLLEwJNR"
+      },
+      "46Frjh9xbLr2rD2rj7AB2jqz": {
+        "#": "46Frjh9xbLr2rD2rj7AB2jqz"
+      }
+    },
+    "sampledata": {
+      "_": {
+        ">": {
+          "##": 1494047182379.81
+        },
+        "#": "sampledata"
+      },
+      "##": {
+        "#": "#sampledata#"
+      }
+    },
+    "46Frjh9xbLr2rD2rj7AB2jqz": {
+      "_": {
+        ">": {
+          "hello": 1494047182372.02
+        },
+        "#": "46Frjh9xbLr2rD2rj7AB2jqz"
+      },
+      "hello": "world"
+    }
+  }
+}

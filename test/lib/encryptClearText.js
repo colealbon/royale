@@ -6,7 +6,12 @@ const Storage = require('dom-storage')
 const chai = require('chai');
 const assert = chai.assert;
 
+var openpgp = require('../../test/openpgp162/openpgp.js');
+//const openpgp = require('openpgp'); <- use if it stops throwing Float64 err
+
 import {encryptClearText} from '../../src/lib/util.js';
+import {decryptPGPMessageWithKey} from '../../src/lib/util.js';
+
 test('encryptClearText throws error on missing openpgp', function() {
     //usage: encryptClearText(openpgp)(publicKeyArmor)(cleartext).then(result => result)
     return encryptClearText()
@@ -220,5 +225,8 @@ a+WGYTHHM8D7ZOiu6ztr5S1AI6ihAooo5H43PoObYsMn2cZQtRUDlVR2KLRj4994
             assert.equal(decrypted, 'always be better')
         })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+        console.log(err);
+        assert.equal(true, err);
+    })
 })

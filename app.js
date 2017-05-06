@@ -9,6 +9,7 @@ const logger = require('koa-logger');
 const path = require('path');
 const serve = require('koa-static');
 const koaBodyParser = require('koa-bodyparser');
+var Gun = require('gun');
 
 app.use(logger());
 const publicFiles = serve(path.join(__dirname, 'public'), { maxage: 60000 } );
@@ -43,7 +44,8 @@ app.use(koaBodyParser({
 .use(async (ctx, next) => {
     return next();
 })
-.use(router.routes());
+.use(router.routes())
+.use(Gun.serve);
 //.use(router.routes(), router.allowedMethods());
 
 app.on('error', (err, ctx) => {

@@ -5,8 +5,9 @@ process.env.NODE_ENV = 'test';
 const Storage = require('dom-storage')
 const chai = require('chai');
 const assert = chai.assert;
+var openpgp = require('../openpgp162/openpgp.js');
 
-import {classifyContent} from '../../src/lib/util.js';
+import {determineContentType} from '../../src/lib/util.js';
 import {handlePost} from '../../src/lib/util.js';
 import {handlePGPPubkey} from '../../src/lib/util.js';
 import {handlePGPPrivkey} from '../../src/lib/util.js';
@@ -18,21 +19,21 @@ import {decryptPGPMessageWithKey} from '../../src/lib/util.js';
 var openpgp = require('../../test/openpgp162/openpgp.js');
 
 suite('utility functions', function() {
-    test('classifyContent throws error on no content', function() {
-        return classifyContent()
+    test('determineContentType throws error on no content', function() {
+        return determineContentType()
         .catch(err => assert.equal(err.toString(), 'Error: missing content'));
     });
-    test('classifyContent throws error on missing openpgp', function() {
-        return classifyContent('fakedata')()
+    test('determineContentType throws error on missing openpgp', function() {
+        return determineContentType('fakedata')()
         .catch(err => assert.equal(err.toString(), 'Error: missing openpgp'));
     });
-    test('classifyContent happy path unclassified fake data', function() {
-        return classifyContent('fakedata')(openpgp)
+    test('determineContentType happy path unclassified fake data', function() {
+        return determineContentType('fakedata')(openpgp)
         .then(response => assert.equal(response, 'cleartext'))
         .catch(err => assert.equal(err.toString(), 'this code path should be dead'));
     });
-    test('classifyContent happy path private key', function() {
-            return classifyContent(`
+    test('determineContentType happy path private key', function() {
+            return determineContentType(`
 -----BEGIN PGP PRIVATE KEY BLOCK-----
 
 lQc9BFiFbAsBEADECyRFjCecc5sW76qo5vsBj/2gaMS2BTt6o4bGb+KpDulANXJT
@@ -147,8 +148,8 @@ wDM11yrM3S6t
             assert.equal(error, 'caught error')
         })
     });
-    test('classifyContent happy path public key', function() {
-        return classifyContent(`
+    test('determineContentType happy path public key', function() {
+        return determineContentType(`
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 
 mQINBFiFbAsBEADECyRFjCecc5sW76qo5vsBj/2gaMS2BTt6o4bGb+KpDulANXJT
@@ -206,8 +207,8 @@ a+WGYTHHM8D7ZOiu6ztr5S1AI6ihAooo5H43PoObYsMn2cZQtRUDlVR2KLRj4994
             assert.equal(error, 'caught error')
         })
     });
-    test('classifyContent happy path pgp message', function() {
-            return classifyContent(`
+    test('determineContentType happy path pgp message', function() {
+            return determineContentType(`
 -----BEGIN PGP MESSAGE-----
 
 hQIMA0bt80axx5bJAQ/9GhmdJbcYwZIvK/782D13H8+FJWr1aSq4WMRjRJnKOHwL
