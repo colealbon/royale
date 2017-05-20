@@ -1,7 +1,7 @@
-// require('./app/index.js')
+require('./app/index.js')
 // require('./app/message.js')
-// require('./lib/util.js')
-// // require('./lib/message.js');
+require('./lib/util.js')
+// require('./lib/message.js');
 // require('./lib/notEmpty.js');
 // require('./lib/notUndefined.js');
 // require('./lib/notCleartext.js');
