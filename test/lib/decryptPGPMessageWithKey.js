@@ -9,55 +9,35 @@ const assert = chai.assert;
 var openpgp = require('../../test/openpgp162/openpgp.js');
 //const openpgp = require('openpgp'); <- use if it stops throwing Float64 err
 
-import {encryptClearText} from '../../src/lib/encryptClearText.js';
 import {decryptPGPMessageWithKey} from '../../src/lib/decryptPGPMessageWithKey.js';
 
-suite('encryptClearText', function() {
-
-    test('encryptClearText throws error on missing openpgp', function() {
-        return encryptClearText()
+suite('decryptPGPMessageWithKey', function() {
+//decryptPGPMessageWithKey(openpgp)(privateKeyArmor)(password)(PGPMessageArmor)
+    test('decryptPGPMessageWithKey throws error on missing openpgp', function() {
+        return decryptPGPMessageWithKey().then(result => result)
         .catch(err => assert.equal(err.toString(), 'Error: missing openpgp'));
     });
-    test('encryptClearText throws error on missing public key', function() {
-        return encryptClearText(openpgp)()
-        .catch(err => assert.equal(err.toString(), 'Error: missing public key'));
+    test('decryptPGPMessageWithKey throws error on missing privateKeyArmor', function() {
+        return decryptPGPMessageWithKey(openpgp)().then(result => result)
+        .catch(err => assert.equal(err.toString(), 'Error: missing privateKeyArmor'));
     });
-    test('encryptClearText throws error on missing cleartext', function() {
-        return encryptClearText(openpgp)(`
------BEGIN PGP PUBLIC KEY BLOCK-----
-Version: GnuPG v2
+    test('decryptPGPMessageWithKey throws error on missing password', function() {
+        //decryptPGPMessageWithKey(openpgp)(privateKeyArmor)(password)(PGPMessageArmor)
+        return decryptPGPMessageWithKey(openpgp)(openpgp)()
+        .catch(err => assert.equal(err.toString(), 'Error: missing password'));
+    });
+    test('decryptPGPMessageWithKey throws error on missing PGPMessageArmor', function() {
+        //decryptPGPMessageWithKey(openpgp)(privateKeyArmor)(password)(PGPMessageArmor)
+        let localStorage = new Storage('./db.json', { strict: false, ws: '  ' });
+        return decryptPGPMessageWithKey(openpgp)(localStorage)('hotlips')()
+        .catch(err => assert.equal(err.toString(), 'Error: missing PGPMessageArmor'));
+    });
 
-mQENBFgqlVYBCAC6kSJzAJqvsh2hcnOScEJwPirTiInjzVeSrTKnF5MCnfFIL8zX
-OjElEDiMvoNWPh3aXZQ6MriCPkn1ECRR5O5eOm9ImTW1/y9vfbdPaU2masznwcF3
-bDzp43Tt5SGK+qFfZbQQOs9JYrXYhblevRElKmf+WgeUGQtYWCQQYjT0sFY2TR+u
-8zIXMcSY41y5wYmMq7AamfPo/9sulSSbHmxakTOYpmZIDGhEiBo7KH9rsek9ZQU9
-MZEyWyPUqHiWGL82F5F3yy4NK5vLUu8RaiVHrbMPrEqgkPTIIlSMo512vQ608hJa
-v1Ee28xP6bHdvZeVyqSUcY2Rdoexh+CQ1DOZABEBAAG0E3Rlc3RfY2xpZW50XzAw
-MDAwMDGJATkEEwEIACMFAlgqlVYCGwMHCwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIX
-gAAKCRDO29wCZYLZsgzXB/48K09OgCZc9SrnsM/OOXbRcfD66bi7ivASM1VsKReN
-4LvOG+QhTFcoj/HxJ+EnTXqz2XhxtUvIas33AI33Sip9XZ2Pt0klAWBjbmEiN7nM
-tVfgxcB5MU4XSfcvunW9I0EnoR0FlpHyMIS9mTuMVNsOz4WfK4Xy0ipRWAWcX+I+
-cLYFpZ41jgcECYb9SsTOWkspBMXkfGMycHisKDPGLYBrsZIuCGdL0vmGmkUlm3BG
-psnDwW22ZHydwT/qUKsBeS0vouxfXTyZChpZhJeSf6usGEOH8lBbs4KmlyfXnx7l
-FNUZmr4STDvPCVbZ4U/zLNU3Z2xKEI2UmpPtgqlwMlzAuQENBFgqlVYBCACz5W+7
-LoF/jYBH6ud5HpW2oGztQWCW5tbSm0IesiqUXanuRsBd22lOcRNwTjtIW/OjvfM5
-PCGknr09gOWHyp3+UX4W5VPoigA4OJjKDNqhqIyWLFHJqzE1BsrD4YmlTvbvg/f2
-xZk2dxVlMX3M1vwjrhSZweKEq8vWtKnMllywyMn2JAjjimqsEHUcZ5yXrm3cQl/p
-ZRSmZXM4gUaag47koWDlojyl58tXVDAl763SzsmCj2pDYv2SMBPuAxTI6NfWmV+g
-rkIMgg+nahZeFKVwG2hdWS1RByRGZkx+zZ/LZ2TnDs0Zc/HZmt6zC7c+elQSBgRS
-vmpipiUHaW2mHpXFABEBAAGJAR8EGAEIAAkFAlgqlVYCGwwACgkQztvcAmWC2bID
-gggAo/wh++bsL0nbvwc4rRIvlq75wtJWGlW3JQ0AWe0O+FYXF7LfyjMn1Nf95jyV
-v0qNfb83HqFmnMhcod6sKcLBYbarjxdDiqg0tuLsuwx6zjJfHN6rxU4pWyQ9YQZt
-FTDUQu7z2fdbsyoxImI1nl1OWfV+AsLo+JPYzgPRExCHI51VPzQ8z/9GEqv3PfXb
-n1wgsuNsqps9DJ8yJE2RcdpWba3RfL9fKDiet4Qpt9u/++e2++SMlliykaKo0oHy
-pvoIvX5766bGVIqGyh8DtuzmlWNvkjoTTkJ96Gn66AM1NjRVxs6aW0ndvKY0DCVI
-Jh3lPln3y0XSF6yYtUukvOLKtw==
-=xC4H
------END PGP PUBLIC KEY BLOCK-----`)()
-        .catch(err => assert.equal(err.toString(), 'Error: missing cleartext'));
-    });
-    test('encryptClearText round trip encrypt -> decrypt', function() {
-        let privateKeyHotlips = `
+    test('decryptPGPMessageWithKey decrypts', function() {
+        //decryptPGPMessageWithKey(openpgp)(privateKeyArmor)(password)(PGPMessageArmor)
+        let localStorage = new Storage('./db.json', { strict: false, ws: '  ' });
+
+        return decryptPGPMessageWithKey(openpgp)(`
 -----BEGIN PGP PRIVATE KEY BLOCK-----
 
 lQc9BFiFbAsBEADECyRFjCecc5sW76qo5vsBj/2gaMS2BTt6o4bGb+KpDulANXJT
@@ -164,68 +144,27 @@ wyfZxlC1FQOVVHYotGPj33jv1Z7M9XXuBKpoiQIwlGMJzlwyzHQLamfmyVF7fS8r
 wDM11yrM3S6t
 =bF8E
 -----END PGP PRIVATE KEY BLOCK-----
-`
-    let pubkeyHotlips = `
------BEGIN PGP PUBLIC KEY BLOCK-----
+`)('hotlips')(`
+-----BEGIN PGP MESSAGE-----
 
-mQINBFiFbAsBEADECyRFjCecc5sW76qo5vsBj/2gaMS2BTt6o4bGb+KpDulANXJT
-OqfRcTAmagUiMOd/sghbvlAfvaZ6QiutVlHZFMIxvErG/Vrn4ZSXwcaoSpiEPnN9
-gBOc3LsPGd7UIsOLf27OOLXnBeYcVFGhY3o/Dppp9yC/fPfIApBQ6EBANBZiehUc
-tEcLWX4Jhn3JXvz8nl9qZNImf/3R0GU4pd+4/Yk2iV3ojNjwPQLLde52z02ZAZp1
-5HznbVbWpD/F6orJujNHyAR5xgdwM2Uy2t4SOBv4G8dOXuGdw6XDIkXgAZcdzPzo
-aIfIyoPa1lAL+p9dL961pvtS34czFvxMi49uG1KQx4eC+tkhgqELgbne4gIdOhaL
-kT6c/fL88RQIKAedVbKOeAg7lugWOsI0jPkncZJLVSoldbcN/7S0YXo2ZiVililS
-G5V61Y1qVKdVZYonU0AwwCfH8TamQjDjQSDrm5V8j5Z+J2mIGUZwS/PQv60+IeMr
-JYbDYlYzfgD5sRSlqquN3NXqfjkW73DQOwMqCQ8LGFbtN1iSTZLDbxKC2qdn1ETr
-ufzvb4eLNKtEDbx5jPj9VNvh7tt3T9vJvPRqndM1htwEVBw2TqgjLqWoYk+w92CV
-H41JdOP3+DaYYMJm4X+Isn/apckMZXtBXxtuwC/KR2g/+vg/wVcYrmgqaQARAQAB
-tAx0ZXN0X2hvdGxpcHOJAj8EEwEIACkFAliFbAsCGwMFCQeGH4AHCwkIBwMCAQYV
-CAIJCgsEFgIDAQIeAQIXgAAKCRAARk55jY1zryPOEACzST0KMoNWGuRHF0hwRKT2
-Nb1iixB146rq758++88/xYkSrcyA1+rdn9PjdbI2Ng52Kg43Gce3Ngd9h1sJODpt
-qr5IKNamrofV11AqQaeyTYCpNyzNs5x6Jb858Nm11f8HcE9xkz5Lursv28hhXPzo
-/d10vn1qMSNrvy9I8sICggbcgmgaHT2iJPGxNVMLflfUNM+C6tKo/6e9GlW3TU/2
-Ua8VGcm4JSDeSRg5NdHJO9/xPknvSxJUDKqfZB2GBACBX22rW//HWWGPUrhtnQWu
-eOS9qU+c84kUM+bQvfZoOr9dH3lOeH4z+sSg59FYeNtMS5JL1ZZDA6W9mHeep7Wd
-xM14u6hNcLsZ3crCGMzER04bfz+AG+uqCKuOyohjbQp6ib9U152SxUJWDjxUetNT
-anLOmEny0Er03O415r/cmVKEzeIv5LhKyaZqWCtSwfIQSF5B7ImvnhZ/9LofA2gz
-kCxOCGTHZTyNm6RexcWQSkelfekqcrZMtfyEByTED3Siaf7fGeKAKaO3RtakNg8G
-SISAui8392krCcYkg2eKncIherdGt8kH8mSvmrKqOqZFtmEKjryviRMjhTbzwOGm
-EqcGfGAerj/Q5km6YxaLjMNHkgQVWGfTHk82/pOcayFbOFh+CdmRKa4u1+8LbMkW
-gE/XMK9mrAelZGMKAUHRHbkCDQRYhWwLARAArC0tfwTPwLlYg0Yal9QvwF4ju/Lt
-rswwrroQM4S9cqHq4cIkumLWzzbm9I8BYjHupn/Nb+CYcPPmJ4MgucnqY95sQWL4
-mj0DdQe6Cfy4okHlIxZ7B9ZVUfu+deX0AkNzJ603kKeQ4z4g/AZ0ONUhKR+SnXuO
-ZKq0cQCHdAkGWz/Zi8/wxGc432ZP0WyWdH228yGpKenRcA/W3DLKuvMYGRmj8lpf
-/oawOQTvk1DN29Iwp0tLlXcZ4AVcA4OvbgtSkHcF7G3rqGJL5KuXdjbE+ywatKzF
-KopnrmW0iZFzAZX46YOc3Wh1WdQs4dI8LWvkL6CCQP96RTVxqjCXxrY+5/gfO1PO
-fWsVNm3v6RFmTzTZHxmFRuNY+JejDVF7ZD27Vklh76lAY10LViTjsEJfw2vecfo4
-PklHslmvf4XtbpZLM6AhjJqOVaYK1ENukmn3zaPDx6mjGZTBgZehV8yp2eqkc1gC
-WRVsAQw4B6zVTfK1IhtQ8oDir1vfoNQykh/d3ClBHLpZURUJE3e4vdjNIGbdp6zg
-t1h69VZROFmrT83mHebnr7i0NJMDDjK869vs/kwB0a/sFJ0V6zA5GRSGSNpqo2fQ
-44ZU2Om/p2T5a8iMkV7jUiHRnNQUNJVxvxpXyjyzK/8f9khJumajMgP+nP5qqjNM
-EK1B0aDIzSSpxbUAEQEAAYkCJQQYAQgADwUCWIVsCwIbDAUJB4YfgAAKCRAARk55
-jY1zr3P4D/44kGxe8eWfM7eP8glGodCwZcRQLncw5tK5WkyTMTUzVaUzTp1OlMOr
-0LITgSTWyDqUG+XbWhVMA/hqkIl9zeie+7s7EZs4qCq8I/hTGeebJ+G5vdPapxh4
-WIGyfQfcbUch2vVW8z2epyJpI+vWQ7H/J6JRFNuFrxAkbwQ95XIUnlzS6PMUTKP1
-uBhtu7qMdQmLOYMKGQbumVskHtE5EWGiFILAtFKW3mR/8Lk6dlZzDUBJZNG96qr8
-h7h60+Qyqy63N9X7vO0v2WiUIKerwMBkZxX33c2lDnifwcawev3Y18pWI9uucQFL
-MQVEDu9w4kw1jLp27gVbyjCBiWIOcdTN7BsPE5hbCifASN36E63vz1NMb99f97db
-yrGc1ncePMt7Pgn9uil0djqGRFFnvMytcpX30M3mGm6zhWxAF0JWEy0a+/sFaQrG
-jHBDo05zVlLkh+csL9ML3k7pwbVrMV+f8bZPizNSR0ERk2DR+Q1GbN5AmzGWWpPu
-Sl+cnxvzJfrq9hH7pUssociL2H2SRoGApX0NkQhtlLAbKju2gj0uyIKx049wOoKC
-a+WGYTHHM8D7ZOiu6ztr5S1AI6ihAooo5H43PoObYsMn2cZQtRUDlVR2KLRj4994
-79WezPV17gSqaIkCMJRjCc5cMsx0C2pn5slRe30vK8AzNdcqzN0urQ==
-=J8X0
------END PGP PUBLIC KEY BLOCK-----
-`
-        return encryptClearText(openpgp)(pubkeyHotlips)('always be better')
-        .then(encrypted => {
-            return decryptPGPMessageWithKey(openpgp)(privateKeyHotlips)('hotlips')(encrypted)
-            .then(decrypted => {
-                assert.equal(decrypted, 'always be better')
-            })
+hQIMA0bt80axx5bJAQ/9GhmdJbcYwZIvK/782D13H8+FJWr1aSq4WMRjRJnKOHwL
+TqbP2N7LAzYDj/uKZjh1VBDT3LvXdwXeKJY4zS1idPfUwSaYWGpV9N7eO1vM0X7v
+HtTaNG/hkCpeO9faC3bMi11QB/ZjVGFV9XJ5Q9jSL2x9W+hwV0zPfAcS0R6YzMVj
+tHprSu3MRsYBKuXiyywwFsG4p69TxRRu/XBKXKL4GsRYKee5EybbpQCK3b6VB7cm
+FkULNw1ER8600UMOp690YClJSMW5yVE1C+aHJ8UDKTbuZpgffRFkiqT3XBDK4uS6
+sWbiw7FZFHNSTiOecwbiIkGjzfEm84IWJRSVruBWaNjCaXAbjw6WoP36V7y/IiGt
+J1bIigjOM5v3R+kbh2nTGMnV8mnMrwYMRi//dWslwSlZFev9BClgzLZ0GCmB5aJm
+ximN+nNfZ1JvctFkGC1643I5KrcHi05attIjURMqJoJRgQ9KB21NydXwabul09CV
+dlAPjdE0fInNM+xYEsRRjWKnLZ/x/caC4rNQrrzSLLIZxOXgNc6iif2pzezAu1AP
+hqkmRVOtgo/wCooFEzwe894tXklOL6HWmUvyB9U6zlwe9kHhfAAOQudg8p70O4ib
+imDDbKFMFM73WDIa75EcpaEYZtF3SW8saXNqDkUnIdar+avwnnNAfZxdof7WcuzS
+SgEePD1t1pvowvu4/dn0Ja10oyo20eTqtTFfrRw5ROeZafswVDrC5q5KAFfm2Q2W
+G7Pw9EktJ8t0DvuKMjl9CsI7cY6BDXs3Jn4J
+=rfvU
+-----END PGP MESSAGE-----`)
+        .then((decrypted) => {
+            assert.equal(decrypted, 'stay in school\n');
         })
-        .catch(err => {
-            assert.equal(true, err);
-        })
+        .catch(err => assert.equal(err.toString(), 'not an expected path'));
     });
 });

@@ -2,7 +2,10 @@ const router = require('koa-router')();
 const config = require(__dirname + '/../config/options.js');
 const fs = require('fs');
 const memoize = require('memoizee');
-const util = require(__dirname + '/../src/lib/util.js');
+
+const determineContentType = require(__dirname + '/../src/lib/determineContentType.js').determineContentType;
+const determineKeyType = require(__dirname + '/../src/lib/determineKeyType.js').determineKeyType;
+//const util = require(__dirname + '/../src/lib/util.js');
 
 const openpgp = require('../test/openpgp162/openpgp.js');
 
@@ -53,12 +56,10 @@ router.get('/', async (ctx, next) => {
 });
 
 router.post('/', async (ctx, next) => {
-    //console.log('11111111', ctx.request.body)
     const postedContent = await JSON.stringify(ctx.request.body);
     const msgTxt = await JSON.parse(postedContent).message_txt
     if (msgTxt !== '') {
-        const classification = await util.classifyContent(msgTxt)(openpgp);
-        console.log(classification);
+        const contentType = await determineContentType(msgTxt)(openpgp);
 
         // const privkey_txt = await get_server_privkey();
         // const cleaned_privkey = await clean_content(privkey_txt);
@@ -72,7 +73,6 @@ router.post('/', async (ctx, next) => {
         // console.log(decrypted_txt);
         // const client_userid = await get_user_from_pubkey(decrypted_txt);
     }
-
 
     return ctx.render('message', {
         app_name: config.app_name

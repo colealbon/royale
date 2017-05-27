@@ -2,13 +2,27 @@
 //import 'webcomponents.js/webcomponents.js';
 //uncomment line above to double app size and support ios.
 
-// helper functions
-import * as util from './lib/util';
-window.handlePost = util.handlePost;
+import {handlePost} from './lib/handlePost.js';
+import {determineContentType} from './lib/determineContentType.js'
+import {determineKeyType} from './lib/determineKeyType.js'
+import {encryptCleartextMulti} from './lib/encryptCleartextMulti.js'
+import {encryptClearText} from './lib/encryptClearText.js'
+import {decryptPGPMessage} from './lib/decryptPGPMessage.js'
+import {savePGPPubkey} from './lib/savePGPPubkey.js'
+import {savePGPPrivkey} from './lib/savePGPPrivkey.js'
+import {getFromStorage} from './lib/getFromStorage.js'
+import {decryptPGPMessageWithKey} from './lib/decryptPGPMessageWithKey.js'
 
-// window.handleContent = util.handleContent;
-// window.isPGPPubkey   = util.isPGPPubkey;
-// window.isPGPPrivkey  = util.isPGPPrivkey;
+window.handlePost = handlePost ;
+window.determineContentType = determineContentType;
+window.determineKeyType = determineKeyType;
+window.encryptCleartextMulti = encryptCleartextMulti;
+window.encryptClearText = encryptClearText;
+window.decryptPGPMessage = decryptPGPMessage;
+window.savePGPPubkey = savePGPPubkey;
+window.savePGPPrivkey = savePGPPrivkey;
+window.getFromStorage = getFromStorage;
+window.decryptPGPMessageWithKey = decryptPGPMessageWithKey;
 
 // rebel router
 import {RebelRouter} from '../node_modules/rebel-router/src/rebel-router.js';

@@ -3,7 +3,7 @@
 import notEmpty from '../../src/lib/notEmpty.js';
 import notPGPContent from '../../src/lib/notPGPContent.js';
 
-export default function handleCleartext(content) {
+export function handleCleartext(content) {
     return (!content) ?
     () => notEmpty(content):
     (openpgp) => {

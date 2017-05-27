@@ -2,62 +2,31 @@
 /*eslint-env node, mocha, es6 */
 process.env.NODE_ENV = 'test';
 
-const Storage = require('dom-storage')
+// const Storage = require('dom-storage')
 const chai = require('chai');
 const assert = chai.assert;
+var openpgp = require('../openpgp162/openpgp.js');
+
+import {determineContentType} from '../../src/lib/determineContentType.js';
 
 var openpgp = require('../../test/openpgp162/openpgp.js');
-//const openpgp = require('openpgp'); <- use if it stops throwing Float64 err
 
-import {encryptClearText} from '../../src/lib/encryptClearText.js';
-import {decryptPGPMessageWithKey} from '../../src/lib/decryptPGPMessageWithKey.js';
-
-suite('encryptClearText', function() {
-
-    test('encryptClearText throws error on missing openpgp', function() {
-        return encryptClearText()
+suite('determineContentType', function() {
+    test('determineContentType throws error on no content', function() {
+        return determineContentType()
+        .catch(err => assert.equal(err.toString(), 'Error: missing content'));
+    });
+    test('determineContentType throws error on missing openpgp', function() {
+        return determineContentType('fakedata')()
         .catch(err => assert.equal(err.toString(), 'Error: missing openpgp'));
     });
-    test('encryptClearText throws error on missing public key', function() {
-        return encryptClearText(openpgp)()
-        .catch(err => assert.equal(err.toString(), 'Error: missing public key'));
+    test('determineContentType happy path unclassified fake data', function() {
+        return determineContentType('fakedata')(openpgp)
+        .then(response => assert.equal(response, 'cleartext'))
+        .catch(err => assert.equal(err.toString(), 'this code path should be dead'));
     });
-    test('encryptClearText throws error on missing cleartext', function() {
-        return encryptClearText(openpgp)(`
------BEGIN PGP PUBLIC KEY BLOCK-----
-Version: GnuPG v2
-
-mQENBFgqlVYBCAC6kSJzAJqvsh2hcnOScEJwPirTiInjzVeSrTKnF5MCnfFIL8zX
-OjElEDiMvoNWPh3aXZQ6MriCPkn1ECRR5O5eOm9ImTW1/y9vfbdPaU2masznwcF3
-bDzp43Tt5SGK+qFfZbQQOs9JYrXYhblevRElKmf+WgeUGQtYWCQQYjT0sFY2TR+u
-8zIXMcSY41y5wYmMq7AamfPo/9sulSSbHmxakTOYpmZIDGhEiBo7KH9rsek9ZQU9
-MZEyWyPUqHiWGL82F5F3yy4NK5vLUu8RaiVHrbMPrEqgkPTIIlSMo512vQ608hJa
-v1Ee28xP6bHdvZeVyqSUcY2Rdoexh+CQ1DOZABEBAAG0E3Rlc3RfY2xpZW50XzAw
-MDAwMDGJATkEEwEIACMFAlgqlVYCGwMHCwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIX
-gAAKCRDO29wCZYLZsgzXB/48K09OgCZc9SrnsM/OOXbRcfD66bi7ivASM1VsKReN
-4LvOG+QhTFcoj/HxJ+EnTXqz2XhxtUvIas33AI33Sip9XZ2Pt0klAWBjbmEiN7nM
-tVfgxcB5MU4XSfcvunW9I0EnoR0FlpHyMIS9mTuMVNsOz4WfK4Xy0ipRWAWcX+I+
-cLYFpZ41jgcECYb9SsTOWkspBMXkfGMycHisKDPGLYBrsZIuCGdL0vmGmkUlm3BG
-psnDwW22ZHydwT/qUKsBeS0vouxfXTyZChpZhJeSf6usGEOH8lBbs4KmlyfXnx7l
-FNUZmr4STDvPCVbZ4U/zLNU3Z2xKEI2UmpPtgqlwMlzAuQENBFgqlVYBCACz5W+7
-LoF/jYBH6ud5HpW2oGztQWCW5tbSm0IesiqUXanuRsBd22lOcRNwTjtIW/OjvfM5
-PCGknr09gOWHyp3+UX4W5VPoigA4OJjKDNqhqIyWLFHJqzE1BsrD4YmlTvbvg/f2
-xZk2dxVlMX3M1vwjrhSZweKEq8vWtKnMllywyMn2JAjjimqsEHUcZ5yXrm3cQl/p
-ZRSmZXM4gUaag47koWDlojyl58tXVDAl763SzsmCj2pDYv2SMBPuAxTI6NfWmV+g
-rkIMgg+nahZeFKVwG2hdWS1RByRGZkx+zZ/LZ2TnDs0Zc/HZmt6zC7c+elQSBgRS
-vmpipiUHaW2mHpXFABEBAAGJAR8EGAEIAAkFAlgqlVYCGwwACgkQztvcAmWC2bID
-gggAo/wh++bsL0nbvwc4rRIvlq75wtJWGlW3JQ0AWe0O+FYXF7LfyjMn1Nf95jyV
-v0qNfb83HqFmnMhcod6sKcLBYbarjxdDiqg0tuLsuwx6zjJfHN6rxU4pWyQ9YQZt
-FTDUQu7z2fdbsyoxImI1nl1OWfV+AsLo+JPYzgPRExCHI51VPzQ8z/9GEqv3PfXb
-n1wgsuNsqps9DJ8yJE2RcdpWba3RfL9fKDiet4Qpt9u/++e2++SMlliykaKo0oHy
-pvoIvX5766bGVIqGyh8DtuzmlWNvkjoTTkJ96Gn66AM1NjRVxs6aW0ndvKY0DCVI
-Jh3lPln3y0XSF6yYtUukvOLKtw==
-=xC4H
------END PGP PUBLIC KEY BLOCK-----`)()
-        .catch(err => assert.equal(err.toString(), 'Error: missing cleartext'));
-    });
-    test('encryptClearText round trip encrypt -> decrypt', function() {
-        let privateKeyHotlips = `
+    test('determineContentType happy path private key', function() {
+            return determineContentType(`
 -----BEGIN PGP PRIVATE KEY BLOCK-----
 
 lQc9BFiFbAsBEADECyRFjCecc5sW76qo5vsBj/2gaMS2BTt6o4bGb+KpDulANXJT
@@ -164,8 +133,15 @@ wyfZxlC1FQOVVHYotGPj33jv1Z7M9XXuBKpoiQIwlGMJzlwyzHQLamfmyVF7fS8r
 wDM11yrM3S6t
 =bF8E
 -----END PGP PRIVATE KEY BLOCK-----
-`
-    let pubkeyHotlips = `
+
+    `)(openpgp)
+        .then(response => assert.equal(response, 'PGPPrivkey'))
+        .catch(error => {
+            assert.equal(error, 'caught error')
+        })
+    });
+    test('determineContentType happy path public key', function() {
+        return determineContentType(`
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 
 mQINBFiFbAsBEADECyRFjCecc5sW76qo5vsBj/2gaMS2BTt6o4bGb+KpDulANXJT
@@ -216,16 +192,37 @@ a+WGYTHHM8D7ZOiu6ztr5S1AI6ihAooo5H43PoObYsMn2cZQtRUDlVR2KLRj4994
 79WezPV17gSqaIkCMJRjCc5cMsx0C2pn5slRe30vK8AzNdcqzN0urQ==
 =J8X0
 -----END PGP PUBLIC KEY BLOCK-----
-`
-        return encryptClearText(openpgp)(pubkeyHotlips)('always be better')
-        .then(encrypted => {
-            return decryptPGPMessageWithKey(openpgp)(privateKeyHotlips)('hotlips')(encrypted)
-            .then(decrypted => {
-                assert.equal(decrypted, 'always be better')
-            })
+    `)(openpgp)
+        .then(response => assert.equal(response, 'PGPPubkey'))
+        .catch(error => {
+            console.log(error);
+            assert.equal(error, 'caught error')
         })
-        .catch(err => {
-            assert.equal(true, err);
+    });
+    test('determineContentType happy path pgp message', function() {
+            return determineContentType(`
+-----BEGIN PGP MESSAGE-----
+
+hQIMA0bt80axx5bJAQ/9GhmdJbcYwZIvK/782D13H8+FJWr1aSq4WMRjRJnKOHwL
+TqbP2N7LAzYDj/uKZjh1VBDT3LvXdwXeKJY4zS1idPfUwSaYWGpV9N7eO1vM0X7v
+HtTaNG/hkCpeO9faC3bMi11QB/ZjVGFV9XJ5Q9jSL2x9W+hwV0zPfAcS0R6YzMVj
+tHprSu3MRsYBKuXiyywwFsG4p69TxRRu/XBKXKL4GsRYKee5EybbpQCK3b6VB7cm
+FkULNw1ER8600UMOp690YClJSMW5yVE1C+aHJ8UDKTbuZpgffRFkiqT3XBDK4uS6
+sWbiw7FZFHNSTiOecwbiIkGjzfEm84IWJRSVruBWaNjCaXAbjw6WoP36V7y/IiGt
+J1bIigjOM5v3R+kbh2nTGMnV8mnMrwYMRi//dWslwSlZFev9BClgzLZ0GCmB5aJm
+ximN+nNfZ1JvctFkGC1643I5KrcHi05attIjURMqJoJRgQ9KB21NydXwabul09CV
+dlAPjdE0fInNM+xYEsRRjWKnLZ/x/caC4rNQrrzSLLIZxOXgNc6iif2pzezAu1AP
+hqkmRVOtgo/wCooFEzwe894tXklOL6HWmUvyB9U6zlwe9kHhfAAOQudg8p70O4ib
+imDDbKFMFM73WDIa75EcpaEYZtF3SW8saXNqDkUnIdar+avwnnNAfZxdof7WcuzS
+SgEePD1t1pvowvu4/dn0Ja10oyo20eTqtTFfrRw5ROeZafswVDrC5q5KAFfm2Q2W
+G7Pw9EktJ8t0DvuKMjl9CsI7cY6BDXs3Jn4J
+=rfvU
+-----END PGP MESSAGE-----
+    `)(openpgp)
+        .then(response => assert.equal(response, 'PGPMessage'))
+        .catch(error => {
+            console.log(error);
+            assert.equal(error, 'caught error')
         })
     });
 });

@@ -7,38 +7,39 @@ const assert = chai.assert;
 import notCleartext from '../../src/lib/notCleartext.js';
 var openpgp = require('../../test/openpgp162/openpgp.js');
 
-test('notCleartext throws "empty content" if content empty', function testnotCleartext() {
-    const content = '';
-    return notCleartext(content)()
-    .then(assert.notEqual('empty content', 'we should never get here'))
-    .catch((err) => {
-        assert.equal(err.message, 'empty content')
-    })
-});
+suite('notCleartext', function() {
+    test('notCleartext throws "empty content" if content empty', function testnotCleartext() {
+        const content = '';
+        return notCleartext(content)()
+        .then(assert.notEqual('empty content', 'we should never get here'))
+        .catch((err) => {
+            assert.equal(err.message, 'empty content')
+        })
+    });
 
-test('notCleartext throws "undefined content" if content undefined', function testnotCleartext() {
-    return notCleartext()()
-    .then(testResult => {
-        assert.notEqual(1, 1);
-    })
-    .catch(err => {
-        assert.equal(err.message, 'undefined content')
-    })
-});
+    test('notCleartext throws "undefined content" if content undefined', function testnotCleartext() {
+        return notCleartext()()
+        .then(testResult => {
+            assert.notEqual(1, 1);
+        })
+        .catch(err => {
+            assert.equal(err.message, 'undefined content')
+        })
+    });
 
-test('notCleartext throws "missing openpgp" if not called with openpgp', function testnotCleartext() {
-    const content = 'abcdefghijklmnopqrstuvwxyz'
-    return notCleartext(content)()
-    .then((content) => {
-        assert.notEqual(1, 1);
-    })
-    .catch(err => {
-        assert.equal(err.message, 'missing openpgp')
-    })
-});
+    test('notCleartext throws "missing openpgp" if not called with openpgp', function testnotCleartext() {
+        const content = 'abcdefghijklmnopqrstuvwxyz'
+        return notCleartext(content)()
+        .then((content) => {
+            assert.notEqual(1, 1);
+        })
+        .catch(err => {
+            assert.equal(err.message, 'missing openpgp')
+        })
+    });
 
-test('notCleartext returns content if content is PGP Message', function testnotCleartext() {
-    const testContent = `
+    test('notCleartext returns content if content is PGP Message', function testnotCleartext() {
+        const testContent = `
 -----BEGIN PGP MESSAGE-----
 
 hQIMA0bt80axx5bJAQ/9GhmdJbcYwZIvK/782D13H8+FJWr1aSq4WMRjRJnKOHwL
@@ -56,17 +57,17 @@ SgEePD1t1pvowvu4/dn0Ja10oyo20eTqtTFfrRw5ROeZafswVDrC5q5KAFfm2Q2W
 G7Pw9EktJ8t0DvuKMjl9CsI7cY6BDXs3Jn4J
 =rfvU
 -----END PGP MESSAGE-----`
-    return notCleartext(testContent)(openpgp)
-    .then((content) => {
-        assert.equal(content, testContent);
-    })
-    .catch(() => {
-        assert.notEqual(1, 1);
-    })
-});
+        return notCleartext(testContent)(openpgp)
+        .then((content) => {
+            assert.equal(content, testContent);
+        })
+        .catch(() => {
+            assert.notEqual(1, 1);
+        })
+    });
 
-test('notCleartext returns content if content is PGP Private Key', function testnotCleartext() {
-    const testContent = `
+    test('notCleartext returns content if content is PGP Private Key', function testnotCleartext() {
+        const testContent = `
 -----BEGIN PGP PRIVATE KEY BLOCK-----
 Version: GnuPG v2
 
@@ -125,14 +126,14 @@ vKY0DCVIJh3lPln3y0XSF6yYtUukvOLKtw==
 =Ksff
 -----END PGP PRIVATE KEY BLOCK-----
 `
-    return notCleartext(testContent)(openpgp)
-    .then((content) => {
-        assert.equal(content, testContent);
-    })
-    .catch((err) => assert.notEqual(err, 1));
-});
-test('notCleartext returns content if content is PGP Public Key', function testnotCleartext() {
-    const testContent = `
+        return notCleartext(testContent)(openpgp)
+        .then((content) => {
+            assert.equal(content, testContent);
+        })
+        .catch((err) => assert.notEqual(err, 1));
+    });
+    test('notCleartext returns content if content is PGP Public Key', function testnotCleartext() {
+        const testContent = `
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v2
 
@@ -164,20 +165,21 @@ Jh3lPln3y0XSF6yYtUukvOLKtw==
 =xC4H
 -----END PGP PUBLIC KEY BLOCK-----
 `
-    return notCleartext(testContent)(openpgp)
-    .then((content) => {
-        assert.equal(content, testContent)
-    })
-    .catch(err => {
-        assert.notEqual(err.message, 'should not be here')
-    })
-});
+        return notCleartext(testContent)(openpgp)
+        .then((content) => {
+            assert.equal(content, testContent)
+        })
+        .catch(err => {
+            assert.notEqual(err.message, 'should not be here')
+        })
+    });
 
-test('notCleartext throws cleartext if content is cleartext', function testnotCleartext() {
-    let testContent = '123456789';
-    return notCleartext(testContent)(openpgp)
-    .then(() => {
-        assert.notEqual(1, 1);
-    })
-    .catch((err) => assert.equal(err.message, 'cleartext content'))
+    test('notCleartext throws cleartext if content is cleartext', function testnotCleartext() {
+        let testContent = '123456789';
+        return notCleartext(testContent)(openpgp)
+        .then(() => {
+            assert.notEqual(1, 1);
+        })
+        .catch((err) => assert.equal(err.message, 'cleartext content'))
+    });
 });
