@@ -1,6 +1,6 @@
 const router = require('koa-router')();
 
-router.get('/', (ctx) => {
+router.get('/', async (ctx) => {
     return ctx.render('contact')
 })
 

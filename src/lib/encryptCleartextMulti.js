@@ -2,6 +2,7 @@
 
 import {getFromStorage} from './getFromStorage';
 import {determineContentType} from './determineContentType';
+import {encryptClearText} from './encryptClearText';
 
 const PGPPUBKEY = 'PGPPubkey';
 

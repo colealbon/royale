@@ -10,9 +10,7 @@ export function determineContentType(content) {
         return (!openpgp) ?
         Promise.reject('Error: missing openpgp'):
         new Promise((resolve, reject) => {
-            // const PGPPUBKEY = 'PGPPubkey';
             const CLEARTEXT = 'cleartext';
-            // const PGPPRIVKEY = 'PGPPrivkey';
             const PGPMESSAGE = 'PGPMessage';
             let possiblepgpkey = openpgp.key.readArmored(content);
             if (possiblepgpkey.keys[0]) {

@@ -28,7 +28,7 @@ export function decryptPGPMessage(openpgp) {
                             .map(storageItem => determineContentType(storageItem)(openpgp)
                                 .then(contentType => {
                                     if (contentType === PGPPRIVKEY) {
-                                        decryptPGPMessageWithKey(openpgp)(storageItem)(password)(PGPMessageArmor)
+                                        decryptPGPMessageWithKey(openpgp)(password)(storageItem)(PGPMessageArmor)
                                         .then(decrypted => {
                                             resolve(decrypted)
                                         });

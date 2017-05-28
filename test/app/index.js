@@ -44,7 +44,7 @@ suite('landing page', function() {
             return
         })
     });
-    test('check app_name = hotlips', function() {
+    test('check app_name = royale', function() {
         return fetch('http://127.0.0.1:3000')
         .then(function(res) {
             return res.text();
@@ -92,14 +92,6 @@ suite('landing page', function() {
 //             assert.notEqual(cheers('.gun_data').text(), '');
 //         });
 //     });
-// });
-// suite('#7 hotlips.js installed', function() {
-//     test('hotlips.js installed', function() {
-//         return fetch('http://127.0.0.1:3000/js/hotlips.js')
-//         .then(function(res) {
-//             assert.equal(res.ok, true);
-//         })
-//     })
 // });
 // suite('#9 linkedin address on contact page', function() {
 //     test('clinkedin address on contact page', function() {
