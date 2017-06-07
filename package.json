@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "webpack": "webpack; cp dist/royale.js public/js/royale.js;",
-    "openpgp": "cp node_modules/openpgp/dist/openpgp.js public/js/openpgp.js; cp node_modules/openpgp/dist/openpgp.worker.js public/js/openpgp.worker.js",
+    "openpgp": "cp node_modules/openpgp/dist/openpgp.js public/js/openpgp.js; cp node_modules/openpgp/dist/openpgp.worker.js public/js/openpgp.worker.js; cp test/fixtures/royale-server-test.pub public/royale-server-test.pub",
     "postinstall": "mkdir -p public/js; npm run webpack; npm run openpgp;",
     "start": "node bin/www",
     "test": "./node_modules/mocha/bin/mocha --ui=tdd --inline-diffs --colors --compilers js:babel-core/register --require babel-plugin-async-to-promises --require babel-plugin-transform-regenerator --require babel-plugin-syntax-async-functions --require babel-polyfill test/enabled.js"

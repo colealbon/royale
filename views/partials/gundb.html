@@ -1,7 +1,8 @@
 {% block gundb %}
 <script id="gun_script">
+    console.log(location.origin + '/gun');
     var gun = Gun(location.origin + '/gun');
-    gun.put({ hello: 'world' }).key('sampledata');
+    gun.get('random/BJPntEuxg').put({hello: "world"});
     var ref = gun.get('sampledata');
     ref.on(function(data){
         document.getElementById("gun_data").innerHTML=(JSON.stringify(data) || 'gundb broken?');
