@@ -3,6 +3,7 @@
     console.log(location.origin + '/gun');
     var gun = Gun(location.origin + '/gun');
     gun.get('random/BJPntEuxg').put({hello: "world"});
+    
     var ref = gun.get('sampledata');
     ref.on(function(data){
         document.getElementById("gun_data").innerHTML=(JSON.stringify(data) || 'gundb broken?');
