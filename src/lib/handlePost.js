@@ -24,42 +24,44 @@ export function handlePost(content) {
         Promise.reject('Error: missing openpgp'):
         (localStorage) => {
             return (password) => {
-                return new Promise((resolve, reject) => {
-                    determineContentType(content)(openpgp)
-                    .then(contentType => {
-                        if (contentType === CLEARTEXT) {
-                            console.log(CLEARTEXT);
-                            // encrypt
-                            return encryptCleartextMulti(content)(openpgp)(localStorage)
-                            .then(result => result);
-                        }
-                        if (contentType === PGPPRIVKEY) {
-                            console.log(PGPPRIVKEY);
-                            // save and broadcast converted public key
-                            return savePGPPrivkey(content)(openpgp)(localStorage)
-                            //return broadcastMessage(content)(openpgp)(localStorage)
-                            .then(result => result)
-                        }
-                        if (contentType === PGPPUBKEY) {
-                            console.log(PGPPUBKEY);
-                            // save to localStorage
-                            return savePGPPubkey(content)(openpgp)(localStorage)
-                            .then(result => result)
-                        }
-                        if (contentType === PGPMESSAGE) {
-                            console.log(PGPMESSAGE);
-                            // get PGPKeys, decrypt,  and return
-                            return decryptPGPMessage(openpgp)(localStorage)(password)(content)
-                            .then(result => {
-                                return result
-                            })
-                        }
+                return (gundb) => {
+                    return new Promise((resolve, reject) => {
+                        determineContentType(content)(openpgp)
+                        .then(contentType => {
+                            if (contentType === CLEARTEXT) {
+                                console.log(CLEARTEXT);
+                                // encrypt
+                                return encryptCleartextMulti(content)(openpgp)(localStorage)
+                                .then(result => result);
+                            }
+                            if (contentType === PGPPRIVKEY) {
+                                console.log(PGPPRIVKEY);
+                                // save and broadcast converted public key
+                                return savePGPPrivkey(content)(openpgp)(localStorage)
+                                //return broadcastMessage(content)(openpgp)(localStorage)
+                                .then(result => result)
+                            }
+                            if (contentType === PGPPUBKEY) {
+                                console.log(PGPPUBKEY);
+                                // save to localStorage
+                                return savePGPPubkey(content)(openpgp)(localStorage)
+                                .then(result => result)
+                            }
+                            if (contentType === PGPMESSAGE) {
+                                console.log(PGPMESSAGE);
+                                // get PGPKeys, decrypt,  and return
+                                return decryptPGPMessage(openpgp)(localStorage)(password)(content)
+                                .then(result => {
+                                    return result
+                                })
+                            }
+                        })
+                        .then(result => {
+                            resolve(result)
+                        })
+                        .catch((err) => reject(err))
                     })
-                    .then(result => {
-                        resolve(result)
-                    })
-                    .catch((err) => reject(err))
-                })
+                }
             }
         }
     }
