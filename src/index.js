@@ -3,25 +3,24 @@
 //uncomment line above to double app size and support ios.
 
 import {handlePost} from './lib/handlePost.js';
+window.handlePost = handlePost;
 import {determineContentType} from './lib/determineContentType.js'
-import {determineKeyType} from './lib/determineKeyType.js'
-import {encryptCleartextMulti} from './lib/encryptCleartextMulti.js'
-import {encryptClearText} from './lib/encryptClearText.js'
-import {decryptPGPMessage} from './lib/decryptPGPMessage.js'
-import {savePGPPubkey} from './lib/savePGPPubkey.js'
-import {savePGPPrivkey} from './lib/savePGPPrivkey.js'
-import {getFromStorage} from './lib/getFromStorage.js'
-import {decryptPGPMessageWithKey} from './lib/decryptPGPMessageWithKey.js'
-
-window.handlePost = handlePost ;
 window.determineContentType = determineContentType;
+import {determineKeyType} from './lib/determineKeyType.js'
 window.determineKeyType = determineKeyType;
+import {encryptCleartextMulti} from './lib/encryptCleartextMulti.js'
 window.encryptCleartextMulti = encryptCleartextMulti;
+import {encryptClearText} from './lib/encryptClearText.js'
 window.encryptClearText = encryptClearText;
+import {decryptPGPMessage} from './lib/decryptPGPMessage.js'
 window.decryptPGPMessage = decryptPGPMessage;
+import {savePGPPubkey} from './lib/savePGPPubkey.js'
 window.savePGPPubkey = savePGPPubkey;
+import {savePGPPrivkey} from './lib/savePGPPrivkey.js'
 window.savePGPPrivkey = savePGPPrivkey;
+import {getFromStorage} from './lib/getFromStorage.js'
 window.getFromStorage = getFromStorage;
+import {decryptPGPMessageWithKey} from './lib/decryptPGPMessageWithKey.js'
 window.decryptPGPMessageWithKey = decryptPGPMessageWithKey;
 
 // rebel router

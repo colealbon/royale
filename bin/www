@@ -27,7 +27,7 @@ server.on('listening', onListening);
 
 var Gun = require('gun');
 var gun = Gun({
-	file: 'data.json',
+	file: 'gundata.json',
 	web: server
 })
 
