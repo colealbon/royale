@@ -63,7 +63,7 @@ n1wgsuNsqps9DJ8yJE2RcdpWba3RfL9fKDiet4Qpt9u/++e2++SMlliykaKo0oHy
 pvoIvX5766bGVIqGyh8DtuzmlWNvkjoTTkJ96Gn66AM1NjRVxs6aW0ndvKY0DCVI
 Jh3lPln3y0XSF6yYtUukvOLKtw==
 =xC4H
------END PGP PUBLIC KEY BLOCK-----`)(openpgp)(localStorage)()
+-----END PGP PUBLIC KEY BLOCK-----`)(openpgp)(localStorage)()()
         .then(result => {
             //console.log(result)
             var fromStorage = localStorage.getItem('test_client_0000001');
@@ -185,7 +185,7 @@ sBsqO7aCPS7IgrHTj3A6goJr5YZhMcczwPtk6K7rO2vlLUAjqKECiijkfjc+g5ti
 wyfZxlC1FQOVVHYotGPj33jv1Z7M9XXuBKpoiQIwlGMJzlwyzHQLamfmyVF7fS8r
 wDM11yrM3S6t
 =bF8E
------END PGP PRIVATE KEY BLOCK-----`)(openpgp)(localStorage)()
+-----END PGP PRIVATE KEY BLOCK-----`)(openpgp)(localStorage)()()
         .then(result => {
             var fromStorage = localStorage.getItem('test_hotlips')
             var keyFromStorage = openpgp.key.readArmored(fromStorage)

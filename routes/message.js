@@ -59,7 +59,7 @@ router.post('/', async (ctx, next) => {
     const postedContent = await JSON.stringify(ctx.request.body);
     const msgTxt = await JSON.parse(postedContent).message_txt
     if (msgTxt !== '') {
-        handlePost(msgTxt)(openpgp)(localStorage)('royale')
+        handlePost(msgTxt)(openpgp)(localStorage)('royale')()
         .then((resultMessage) => {
             //console.log('handlePost --> ' + resultMessage);
             return ctx.render('message', {

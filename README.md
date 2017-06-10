@@ -1,16 +1,17 @@
 # hotlips
 seed/starter project using koa2, rebel-router
 * [test driven](https://github.com/colealbon/hotlips/tree/master/test) javascript development
-* [isomorphic functions](https://github.com/colealbon/hotlips/blob/master/src/lib/util.js)
+* [isomorphic functions](https://github.com/colealbon/hotlips/blob/master/src/lib/)
 * serverless immutable transactions
 * use of pgp cryptographic primitives
 * webpack deployment
-* es7 async/await flow control
+* es7 async/await flow control (or at least promise based)
+* heavy use of promise aware partial application (anticipating aggressive memoize caching)
 
 # installation
 ```
-git clone https://github.com/colealbon/hotlips.git
-cd hotlips;
+git clone https://github.com/colealbon/royale.git
+cd royale;
 npm install;
 (modify config/options.js if needed)
 npm test;
@@ -23,7 +24,7 @@ navigate to localhost:3000 (or settings from config/options.js)
 # todo
 - ~~Install node/koa/webpack~~
 - ~~Install [gundb](http://gun.js.org/)~~
-- ~~make a [deck of cards](https://github.com/colealbon/hotlips/blob/master/views/partials/freshdeck.html)~~
+- ~~make a [deck of cards](https://github.com/colealbon/royale/blob/master/views/partials/freshdeck.html)~~
 - ~~install rebel router~~
 - [Alice and Bob exchange keys](http://localhost:3000/#/message)
 - [Mental Poker](https://en.wikipedia.org/wiki/Mental_poker)

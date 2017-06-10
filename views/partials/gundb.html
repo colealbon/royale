@@ -1,10 +1,16 @@
 {% block gundb %}
 <script id="gun_script">
+    console.log(location.origin + '/gun');
     var gun = Gun(location.origin + '/gun');
-    gun.put({ hello: 'world' }).key('sampledata');
-    var ref = gun.get('sampledata');
+    //gun.get('').put({hello: "world"});
+
+    var ref = gun.get('royale');
     ref.on(function(data){
-        document.getElementById("gun_data").innerHTML=(JSON.stringify(data) || 'gundb broken?');
+        document.getElementById("gun_data").innerHTML=(JSON.stringify(data.royale) || 'gundb broken?');
     });
+    setInterval(function() {
+        gun.get('royale').put({royale: Date.now()})
+    }, 3000);
+    
 </script>
 {% endblock %}

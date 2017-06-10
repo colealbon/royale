@@ -1,18 +1,32 @@
 'use strict';
-
-import {getFromStorage} from './getFromStorage';
+import notEmpty from '../../src/lib/notEmpty.js';
+import notPGPPrivkey from '../../src/lib/notPGPPrivkey.js';
 
 export function broadcast(content) {
-    const notPGPPrivkey = require('./notPGPPrivkey.js');
-    // import notCleartext from './notCleartext.js';
-    // import notEmpty from './notEmpty.js';
-    notPGPPrivkey(content);
-    // notCleartext(content);
-    // notEmpty(content);
-
-    gun.get('royale').put({
-          name: "LATEST",
-          email: content
-        });
-
+    return (!content) ?
+    Promise.reject(new Error('missing content')) :
+    (gun) => {
+        return (!gun) ?
+        Promise.reject(new Error('missing gundb')) :
+        (openpgp) => {
+            return (!openpgp) ?
+            Promise.reject(new Error('missing openpgp')) :
+            notEmpty(content)
+            .then((content) => {
+                return notPGPPrivkey(content)(openpgp)
+            })
+            .then((content) => {
+                return new Promise((resolve, reject) => {
+                    try {
+                        //var royale = gun.get('royale')
+                        const id = 'royale';
+                        const resultMsg = gun.get(id).put({id: content});
+                        resolve(resultMsg);
+                    } catch (error) {
+                        reject(error);
+                    }
+                })
+            })
+        }
+    }
 }

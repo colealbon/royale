@@ -50,7 +50,7 @@ router.get('/', async (ctx, next) => {
         app_name: config.app_name,
         ip_local: ip_local || "127.0.0.1",
         ip_external: ip_external,
-        server_pubkey_url: config.server_pubkey,
+        server_pubkey_url: config.server_pubkey_url,
         port: process.env.PORT || config.port,
         recipient_userid: server_userid,
         recipient_pubkey_txt: server_pubkey_txt

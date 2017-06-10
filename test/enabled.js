@@ -1,4 +1,4 @@
-
+require('./lib/broadcast.js');
 require('./lib/decryptPGPMessageWithKey')
 require('./lib/decryptPGPMessage')
 require('./lib/determineContentType.js')
