@@ -7,7 +7,7 @@ const assert = chai.assert;
 import notPGPPrivkey from '../../src/lib/notPGPPrivkey.js';
 var openpgp = require('../../test/openpgp162/openpgp.js');
 
-suite('notPGPPrivkeyey', function() {
+suite('notPGPPrivkey', function() {
     test('notPGPPrivkey throws "empty content" if content empty', function testnotPGPPrivkey() {
         const content = '';
         return notPGPPrivkey(content)()
