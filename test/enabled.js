@@ -1,3 +1,5 @@
+require('./lib/shuffle.js');
+require('./lib/deck.js');
 require('./lib/savePGPPubkey.js');
 require('./lib/broadcast.js');
 require('./lib/decryptPGPMessageWithKey');

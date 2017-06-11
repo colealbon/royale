@@ -35,4 +35,3 @@ import {RoadmapPage} from './pages/roadmap.js';
 import {ContactPage} from './pages/contact.js';
 import {MessagePage} from './pages/message.js';
 import {DeckPage}    from './pages/deck.js';
-import {ConnectPage} from './pages/connect.js';
