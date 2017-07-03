@@ -22,6 +22,8 @@ import {getFromStorage} from './lib/getFromStorage.js'
 window.getFromStorage = getFromStorage;
 import {decryptPGPMessageWithKey} from './lib/decryptPGPMessageWithKey.js'
 window.decryptPGPMessageWithKey = decryptPGPMessageWithKey;
+import {shuffle} from './lib/shuffle.js';
+window.shuffle = shuffle;
 
 // rebel router
 import {RebelRouter} from '../node_modules/rebel-router/src/rebel-router.js';
@@ -34,4 +36,5 @@ import {IndexPage}   from './pages/index.js';
 import {RoadmapPage} from './pages/roadmap.js';
 import {ContactPage} from './pages/contact.js';
 import {MessagePage} from './pages/message.js';
+import {PlayPage}    from './pages/play.js';
 import {DeckPage}    from './pages/deck.js';
