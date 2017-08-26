@@ -10,7 +10,7 @@ export function encryptClearText(openpgp) {
         (cleartext) => {
             return (!cleartext) ?
             Promise.reject('Error: missing cleartext'):
-            new Promise((resolve, reject) => {
+            new Promise((resolve) => {
                 let PGPPubkey = openpgp.key.readArmored(publicKeyArmor)
                 /*
                 the latest openpgp 2.5.4 breaks on our console only tools.

@@ -2,6 +2,11 @@
 //import 'webcomponents.js/webcomponents.js';
 //uncomment line above to double app size and support ios.
 
+const uuidv1 = require('uuid/v1');
+window.uuidv1 = uuidv1;
+
+import {handleMessage} from './lib/handleMessage.js';
+window.handleMessage = handleMessage;
 import {handlePost} from './lib/handlePost.js';
 window.handlePost = handlePost;
 import {determineContentType} from './lib/determineContentType.js'
@@ -24,6 +29,10 @@ import {decryptPGPMessageWithKey} from './lib/decryptPGPMessageWithKey.js'
 window.decryptPGPMessageWithKey = decryptPGPMessageWithKey;
 import {shuffle} from './lib/shuffle.js';
 window.shuffle = shuffle;
+import {broadcast} from './lib/broadcast.js';
+window.broadcast = broadcast;
+import {broadcastMulti} from './lib/broadcastMulti.js';
+window.broadcastMulti = broadcastMulti;
 
 // rebel router
 import {RebelRouter} from '../node_modules/rebel-router/src/rebel-router.js';

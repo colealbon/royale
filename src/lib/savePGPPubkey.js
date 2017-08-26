@@ -21,31 +21,22 @@ export function savePGPPubkey(PGPkeyArmor) {
             new Promise((resolve, reject) => {
                 let PGPkey = openpgp.key.readArmored(PGPkeyArmor);
                 notEmpty(PGPkeyArmor)
-                .then(() => {
-                    return notCleartext(PGPkeyArmor)(openpgp)
+                .then(() => notCleartext(PGPkeyArmor)(openpgp))
+                .then(() => notPGPPrivkey(PGPkeyArmor)(openpgp))
+                .then(() => notPGPMessage(PGPkeyArmor)(openpgp))
+                .then(() => getFromStorage(localStorage)(PGPkey.keys[0].users[0].userId.userid))
+                .then(existingKey => {
+                    return (!existingKey) ?
+                    Promise.resolve('none') :
+                    determineContentType(existingKey)(openpgp);
                 })
-                .then(() => {
-                    return notPGPPrivkey(PGPkeyArmor)(openpgp)
-                })
-                .then(() => {
-                    return notPGPMessage(PGPkeyArmor)(openpgp)
-                    // fixme? throws Cannot read property \'users\' of undefined instead of "not PGPMessage content"
-                })
-                .then(() => {
-                    return getFromStorage(localStorage)(PGPkey.keys[0].users[0].userId.userid)
-                    .then(existingKey => {
-                        return (!existingKey) ?
-                        Promise.resolve('none') :
-                        determineContentType(existingKey)(openpgp);
-                    })
-                    .then(existingKeyType => {
-                        if (existingKeyType === 'PGPPrivkey'){
-                            resolve('pubkey ignored X- attempted overwrite privkey')
-                        } else {
-                            localStorage.setItem(PGPkey.keys[0].users[0].userId.userid, PGPkeyArmor)
-                            resolve(`public pgp key saved <- ${PGPkey.keys[0].users[0].userId.userid}`)
-                        }
-                    })
+                .then(existingKeyType => {
+                    if (existingKeyType === 'PGPPrivkey'){
+                        resolve('pubkey ignored X- attempted overwrite privkey')
+                    } else {
+                        localStorage.setItem(PGPkey.keys[0].users[0].userId.userid, PGPkeyArmor)
+                        resolve(`public pgp key saved <- ${PGPkey.keys[0].users[0].userId.userid}`)
+                    }
                 })
                 .catch((err) => reject(err))
             })

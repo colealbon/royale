@@ -49,7 +49,7 @@ suite('savePGPPubkey', function() {
     test('savePGPPubkey throws error on PGP Private Key', function testSavePGPPrivkey() {
         let localStorage = new Storage(config.server_localstorage_file, { strict: false, ws: '  ' });
         return new Promise((resolve, reject) => {
-            fs.readFile(config.client_privkey_file, 'utf8', (err, PGPPrivkeyArmor) => {
+            fs.readFile(config.server_privkey_file, 'utf8', (err, PGPPrivkeyArmor) => {
                 if (err) {
                     reject(err);
                 }
