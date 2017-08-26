@@ -1,7 +1,7 @@
 'use strict';
 
 import notEmpty from '../../src/lib/notEmpty.js';
-export default function notPGPPubkey(content) {
+export default function notPGPPrivkey(content) {
     return (!content) ?
     () => notEmpty(content):
     (openpgp) => {

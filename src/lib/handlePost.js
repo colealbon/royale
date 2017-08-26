@@ -1,15 +1,10 @@
 'use strict';
 
-// import {handlePGPPubkey} from '../../src/lib/util.js';
-// import {handlePGPPrivkey} from '../../src/lib/util.js';
-// import {handlePGPMessage} from '../../src/lib/util.js';
-
+import {broadcastMulti} from './broadcastMulti.js';
 import {encryptCleartextMulti} from './encryptCleartextMulti.js';
-import {decryptPGPMessage} from './decryptPGPMessage.js';
 import {determineContentType} from './determineContentType.js';
 import {savePGPPubkey} from './savePGPPubkey.js';
 import {savePGPPrivkey} from './savePGPPrivkey.js';
-// import {getFromStorage} from './getFromStorage';
 
 const PGPPUBKEY = 'PGPPubkey';
 const CLEARTEXT = 'cleartext';
@@ -29,35 +24,31 @@ export function handlePost(content) {
                         determineContentType(content)(openpgp)
                         .then(contentType => {
                             if (contentType === CLEARTEXT) {
-                                console.log(CLEARTEXT);
-                                // encrypt
-                                return encryptCleartextMulti(content)(openpgp)(localStorage)
-                                .then(result => result);
-                            }
-                            if (contentType === PGPPRIVKEY) {
-                                console.log(PGPPRIVKEY);
-                                // save and broadcast converted public key
-                                return savePGPPrivkey(content)(openpgp)(localStorage)
-                                //return broadcastMessage(content)(openpgp)(localStorage)
-                                .then(result => result)
-                            }
-                            if (contentType === PGPPUBKEY) {
-                                console.log(PGPPUBKEY);
-                                // save to localStorage
-                                return savePGPPubkey(content)(openpgp)(localStorage)
-                                .then(result => result)
-                            }
-                            if (contentType === PGPMESSAGE) {
-                                console.log(PGPMESSAGE);
-                                // get PGPKeys, decrypt,  and return
-                                return decryptPGPMessage(openpgp)(localStorage)(password)(content)
-                                .then(result => {
-                                    return result
+                                encryptCleartextMulti(content)(openpgp)(localStorage)
+                                .then((encrypted) => {
+                                    broadcastMulti(encrypted)(gundb)(openpgp)
+                                    .then((result) => {
+                                        console.log(result);
+                                        resolve(result);
+                                    })
+                                    .catch((error) => reject(error));
                                 })
                             }
-                        })
-                        .then(result => {
-                            resolve(result)
+                            if (contentType === PGPPRIVKEY) {
+                                savePGPPrivkey(content)(openpgp)(localStorage)
+                                .then(result => resolve(result))
+                            }
+                            if (contentType === PGPPUBKEY) {
+                                savePGPPubkey(content)(openpgp)(localStorage)
+                                .then(result => {
+                                    console.log(result);
+                                    resolve(result)
+                                })
+                            }
+                            if (contentType === PGPMESSAGE) {
+                                broadcast(content)(gun)(openpgp)
+                                .then(result => resolve(result))
+                            }
                         })
                         .catch((err) => reject(err))
                     })

@@ -2,6 +2,10 @@
 
 import {getFromStorage} from './getFromStorage';
 import {determineContentType} from './determineContentType';
+import notEmpty from '../../src/lib/notEmpty.js';
+import notCleartext from '../../src/lib/notCleartext.js';
+import notPGPPrivkey from '../../src/lib/notPGPPrivkey.js';
+import notPGPMessage from '../../src/lib/notPGPMessage.js';
 
 export function savePGPPubkey(PGPkeyArmor) {
     // save public key to storage only if it doesn't overwrite a private key
@@ -16,7 +20,11 @@ export function savePGPPubkey(PGPkeyArmor) {
             Promise.reject('Error: missing localStorage'):
             new Promise((resolve, reject) => {
                 let PGPkey = openpgp.key.readArmored(PGPkeyArmor);
-                getFromStorage(localStorage)(PGPkey.keys[0].users[0].userId.userid)
+                notEmpty(PGPkeyArmor)
+                .then(() => notCleartext(PGPkeyArmor)(openpgp))
+                .then(() => notPGPPrivkey(PGPkeyArmor)(openpgp))
+                .then(() => notPGPMessage(PGPkeyArmor)(openpgp))
+                .then(() => getFromStorage(localStorage)(PGPkey.keys[0].users[0].userId.userid))
                 .then(existingKey => {
                     return (!existingKey) ?
                     Promise.resolve('none') :

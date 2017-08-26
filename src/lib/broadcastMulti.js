@@ -2,8 +2,7 @@
 import notEmpty from '../../src/lib/notEmpty.js';
 import notPGPPrivkey from '../../src/lib/notPGPPrivkey.js';
 
-
-export function broadcast(content) {
+export function broadcastMulti(content) {
     return (!content) ?
     Promise.reject(new Error('missing content')) :
     (gun) => {
@@ -19,8 +18,12 @@ export function broadcast(content) {
             .then((content) => {
                 return new Promise((resolve, reject) => {
                     try {
-                        let putResult = gun.get('message').put({message: content});
-                        resolve();
+                        const id = 'royale';
+                        let broadcastQueue = [];
+                        content.map((message) => {
+                            broadcastQueue.push(broadcast(message)(gun)(openpgp))
+                        })
+                        Promise.all(broadcastQueue, (result) => resolve(result));
                     } catch (error) {
                         reject(error);
                     }

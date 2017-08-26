@@ -1,0 +1,201 @@
+    <div id="felt" class="felt">
+    <table style="border-width:1px">
+    <tr width="100%">
+        <td><span id='#card00' style="color:black">&spades;A</span></td>
+        <td><span id='#card01' style="color:black">&spades;2</span></td>
+        <td><span id='#card02' style="color:black">&spades;3</span></td>
+        <td><span id='#card03' style="color:black">&spades;4</span></td>
+        <td><span id='#card04' style="color:black">&spades;5</span></td>
+        <td><span id='#card05' style="color:black">&spades;6</span></td>
+        <td><span id='#card06' style="color:black">&spades;7</span></td>
+        <td><span id='#card07' style="color:black">&spades;8</span></td>
+        <td><span id='#card08' style="color:black">&spades;9</span></td>
+        <td><span id='#card09' style="color:black">&spades;10</span></td>
+        <td><span id='#card10' style="color:black">&spades;J</span></td>
+        <td><span id='#card11' style="color:black">&spades;Q</span></td>
+        <td><span id='#card12' style="color:black">&spades;K</span></td>
+    </tr>
+    <tr>
+        <td><span id='#card13' style="color:red">&hearts;A</span></td>
+        <td><span id='#card14' style="color:red">&hearts;2</span></td>
+        <td><span id='#card15' style="color:red">&hearts;3</span></td>
+        <td><span id='#card16' style="color:red">&hearts;4</span></td>
+        <td><span id='#card17' style="color:red">&hearts;5</span></td>
+        <td><span id='#card18' style="color:red">&hearts;6</span></td>
+        <td><span id='#card19' style="color:red">&hearts;7</span></td>
+        <td><span id='#card20' style="color:red">&hearts;8</span></td>
+        <td><span id='#card21' style="color:red">&hearts;9</span></td>
+        <td><span id='#card22' style="color:red">&hearts;10</span></td>
+        <td><span id='#card23' style="color:red">&hearts;J</span></td>
+        <td><span id='#card24' style="color:red">&hearts;Q</span></td>
+        <td><span id='#card25' style="color:red">&hearts;K</span></td>
+    </tr>
+    <tr>
+        <td><span id='#card26' style="color:red">&diams;A</span></td>
+        <td><span id='#card27' style="color:red">&diams;2</span></td>
+        <td><span id='#card28' style="color:red">&diams;3</span></td>
+        <td><span id='#card29' style="color:red">&diams;4</span></td>
+        <td><span id='#card30' style="color:red">&diams;5</span></td>
+        <td><span id='#card31' style="color:red">&diams;6</span></td>
+        <td><span id='#card32' style="color:red">&diams;7</span></td>
+        <td><span id='#card33' style="color:red">&diams;8</span></td>
+        <td><span id='#card34' style="color:red">&diams;9</span></td>
+        <td><span id='#card35' style="color:red">&diams;10</span></td>
+        <td><span id='#card36' style="color:red">&diams;J</span></td>
+        <td><span id='#card37' style="color:red">&diams;Q</span></td>
+        <td><span id='#card38' style="color:red">&diams;K</span></td>
+    </tr>
+    <tr>
+        <td><span id='#card39' style="color:black">&clubs;A</span></td>
+        <td><span id='#card40' style="color:black">&clubs;2</span></td>
+        <td><span id='#card41' style="color:black">&clubs;3</span></td>
+        <td><span id='#card42' style="color:black">&clubs;4</span></td>
+        <td><span id='#card43' style="color:black">&clubs;5</span></td>
+        <td><span id='#card44' style="color:black">&clubs;6</span></td>
+        <td><span id='#card45' style="color:black">&clubs;7</span></td>
+        <td><span id='#card46' style="color:black">&clubs;8</span></td>
+        <td><span id='#card47' style="color:black">&clubs;9</span></td>
+        <td><span id='#card48' style="color:black">&clubs;10</span></td>
+        <td><span id='#card49' style="color:black">&clubs;J</span></td>
+        <td><span id='#card50' style="color:black">&clubs;Q</span></td>
+        <td><span id='#card51' style="color:black">&clubs;K</span></td>
+    </tr>
+</table>
+    <button onclick="
+        function zeroPad(num, places) {
+            var zero = places - num.toString().length + 1;
+            return Array(+(zero > 0 && zero)).join('0') + num;
+        };
+        let freshdeck = {
+        '🂡': {'suit': '♠', 'face': 'A', 'html': '&spades;A', 'color': 'black'},
+        '🂢': {'suit': '♠', 'face': '2', 'html': '&spades;2', 'color': 'black'},
+        '🂣': {'suit': '♠', 'face': '3', 'html': '&spades;3', 'color': 'black'},
+        '🂤': {'suit': '♠', 'face': '4', 'html': '&spades;4', 'color': 'black'},
+        '🂥': {'suit': '♠', 'face': '5', 'html': '&spades;5', 'color': 'black'},
+        '🂦': {'suit': '♠', 'face': '6', 'html': '&spades;6', 'color': 'black'},
+        '🂧': {'suit': '♠', 'face': '7', 'html': '&spades;7', 'color': 'black'},
+        '🂨': {'suit': '♠', 'face': '8', 'html': '&spades;8', 'color': 'black'},
+        '🂩': {'suit': '♠', 'face': '9', 'html': '&spades;9', 'color': 'black'},
+        '🂪': {'suit': '♠', 'face': '10', 'html': '&spades;10', 'color': 'black'},
+        '🂫': {'suit': '♠', 'face': 'J', 'html': '&spades;J', 'color': 'black'},
+        '🂭': {'suit': '♠', 'face': 'Q', 'html': '&spades;Q', 'color': 'black'},
+        '🂮': {'suit': '♠', 'face': 'K', 'html': '&spades;K', 'color': 'black'},
+        '🂱': {'suit': '♥', 'face': 'A', 'html': '&hearts;A', 'color': 'red'},
+        '🂲': {'suit': '♥', 'face': '2', 'html': '&hearts;2', 'color': 'red'},
+        '🂳': {'suit': '♥', 'face': '3', 'html': '&hearts;3', 'color': 'red'},
+        '🂴': {'suit': '♥', 'face': '4', 'html': '&hearts;4', 'color': 'red'},
+        '🂵': {'suit': '♥', 'face': '5', 'html': '&hearts;5', 'color': 'red'},
+        '🂶': {'suit': '♥', 'face': '6', 'html': '&hearts;6', 'color': 'red'},
+        '🂷': {'suit': '♥', 'face': '7', 'html': '&hearts;7', 'color': 'red'},
+        '🂸': {'suit': '♥', 'face': '8', 'html': '&hearts;8', 'color': 'red'},
+        '🂹': {'suit': '♥', 'face': '9', 'html': '&hearts;9', 'color': 'red'},
+        '🂺': {'suit': '♥', 'face': '10', 'html': '&hearts;10', 'color': 'red'},
+        '🂻': {'suit': '♥', 'face': 'J', 'html': '&hearts;J', 'color': 'red'},
+        '🂽': {'suit': '♥', 'face': 'Q', 'html': '&hearts;Q', 'color': 'red'},
+        '🂾': {'suit': '♥', 'face': 'K', 'html': '&hearts;K', 'color': 'red'},
+        '🃁': {'suit': '♦', 'face': 'A', 'html': '&diams;A', 'color': 'red'},
+        '🃂': {'suit': '♦', 'face': '2', 'html': '&diams;2', 'color': 'red'},
+        '🃃': {'suit': '♦', 'face': '3', 'html': '&diams;3', 'color': 'red'},
+        '🃄': {'suit': '♦', 'face': '4', 'html': '&diams;4', 'color': 'red'},
+        '🃅': {'suit': '♦', 'face': '5', 'html': '&diams;5', 'color': 'red'},
+        '🃆': {'suit': '♦', 'face': '6', 'html': '&diams;6', 'color': 'red'},
+        '🃇': {'suit': '♦', 'face': '7', 'html': '&diams;7', 'color': 'red'},
+        '🃈': {'suit': '♦', 'face': '8', 'html': '&diams;8', 'color': 'red'},
+        '🃉': {'suit': '♦', 'face': '9', 'html': '&diams;9', 'color': 'red'},
+        '🃊': {'suit': '♦', 'face': '10', 'html': '&diams;10', 'color': 'red'},
+        '🃋': {'suit': '♦', 'face': 'J', 'html': '&diams;J', 'color': 'red'},
+        '🃍': {'suit': '♦', 'face': 'Q', 'html': '&diams;Q', 'color': 'red'},
+        '🃎': {'suit': '♦', 'face': 'K', 'html': '&diams;K', 'color': 'red'},
+        '🃑': {'suit': '♣', 'face': 'A', 'html': '&clubs;A', 'color': 'black'},
+        '🃒': {'suit': '♣', 'face': '2', 'html': '&clubs;2', 'color': 'black'},
+        '🃓': {'suit': '♣', 'face': '3', 'html': '&clubs;3', 'color': 'black'},
+        '🃔': {'suit': '♣', 'face': '4', 'html': '&clubs;4', 'color': 'black'},
+        '🃕': {'suit': '♣', 'face': '5', 'html': '&clubs;5', 'color': 'black'},
+        '🃖': {'suit': '♣', 'face': '6', 'html': '&clubs;6', 'color': 'black'},
+        '🃗': {'suit': '♣', 'face': '7', 'html': '&clubs;7', 'color': 'black'},
+        '🃘': {'suit': '♣', 'face': '8', 'html': '&clubs;8', 'color': 'black'},
+        '🃙': {'suit': '♣', 'face': '9', 'html': '&clubs;9', 'color': 'black'},
+        '🃚': {'suit': '♣', 'face': '10', 'html': '&clubs;10', 'color': 'black'},
+        '🃛': {'suit': '♣', 'face': 'J', 'html': '&clubs;J', 'color': 'black'},
+        '🃝': {'suit': '♣', 'face': 'Q', 'html': '&clubs;Q', 'color': 'black'},
+        '🃞': {'suit': '♣', 'face': 'K', 'html': '&clubs;K', 'color': 'black'}
+        };
+        shuffle(Object.keys(freshdeck))
+        .then((shuffled) => {
+            return new Promise((resolve, reject) => {
+                try {
+                    let deckPositionidx = 51;
+                    let deckKey = '';
+                    while (deckPositionidx >= 0) {
+                        deckKey = '#card' + zeroPad(deckPositionidx, 2)
+                        document.getElementById(deckKey).innerHTML = freshdeck[shuffled[deckPositionidx]].html
+                        document.getElementById(deckKey).style.color = freshdeck[shuffled[deckPositionidx]].color
+                        deckPositionidx--;
+                        if (deckPositionidx === 0) {
+                            resolve(shuffled);
+                        }
+                    }
+                } catch (err) {
+                    reject(new Error(err));
+                }
+            })
+        })
+        .then((shuffled) => {
+            return new Promise((resolve, reject) => {
+                try {
+                    let deckPositionidx = 51;
+                    encrypting = [];
+                    while (deckPositionidx >= 0) {
+                        encrypting.push(new Promise((resolve, reject) => {
+                            try {
+                                let shuffledCard = Object.assign(freshdeck[shuffled[deckPositionidx]]);
+                                shuffledCard.deckPositionIndex = deckPositionidx;
+                                getFromStorage(localStorage)()
+                                .then((storedItems) => {
+                                    storedItems.map((storedItem) => {
+                                        determineContentType(storedItem)(openpgp)
+                                        .then((contentType) => {
+                                            if (contentType === 'PGPPrivkey') {
+                                                let privateKeys = openpgp.key.readArmored(storedItem);
+                                                let privateKey = privateKeys.keys[0];
+                                                let publicKeyArmor = privateKey.toPublic().armor();
+                                                let shuffledStr = JSON.stringify(shuffledCard)
+                                                encryptClearText(openpgp)(publicKeyArmor)(shuffledStr)
+                                                .then((cipherText) => {
+                                                    resolve(cipherText);
+                                                })
+                                            }
+                                        })
+                                        .catch((err) => reject(err));
+                                    })
+                                })
+                                .catch((TypeError)) // determineContentType not a function
+                                .catch((err) => reject(err));
+                            } catch (err) {
+                                reject(err); // reject this
+                            }
+                        }))
+                        deckPositionidx--;
+                        if (deckPositionidx === 0) {
+                            resolve(encrypting);
+                        }
+                    }
+                } catch (err) {
+                    reject(new Error(err));
+                }
+            })
+        })
+        .then((encrypting) => {
+            return Promise.all(encrypting)
+            .then((encrypted) => {
+                console.log(encrypted);
+                return(encrypted);
+            })
+        })
+        .catch(function (err) {
+            alert(`error: ${err}`);
+            console.log(`error: ${err}`);
+        })
+    ">shuffle and encrypt</button>
+
+</div>

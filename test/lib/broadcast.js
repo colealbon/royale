@@ -58,22 +58,20 @@ suite('broadcast ', function() {
                 if (err) {
                     reject(err);
                 }
+                gun.get('message').map().on(function(message, id){
+                    if(message) {
+                        assert.equal(message, PGPMessageArmor);
+                        resolve()
+                    }
+                });
                 broadcast(PGPMessageArmor)(gun)(openpgp)
-                .then((broadcastResult) => {
-                    gun.get('royale').map().on(function(message, id){
-                        if(message) {
-                            assert.equal(message, PGPMessageArmor);
-                            resolve()
-                        }
-                    });
-                })
-                .catch((err) => {
-                    reject(err);
+                .catch((error) => {
+                    reject(error);
                 })
             })
         })
     })
-    
+
     test('broadcast throws error on Private PGP key', function testBroadcast() {
         return new Promise((resolve, reject) => {
             fs.readFile(config.server_privkey_file, 'utf8', (err, PGPPrivateKey) => {

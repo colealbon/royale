@@ -5,6 +5,10 @@ const memoize = require('memoizee');
 var openpgp = require('../test/openpgp162/openpgp.js');
 const handlePost = require('../src/lib/handlePost.js').handlePost;
 const Storage = require('dom-storage');
+var Gun = require('gun');
+var gun = Gun({
+    file: 'gundata.json'
+})
 
 let localStorage = new Storage('./royale-storage.json', { strict: false, ws: '  ' });
 
@@ -58,8 +62,9 @@ router.get('/', async (ctx, next) => {
 router.post('/', async (ctx, next) => {
     const postedContent = await JSON.stringify(ctx.request.body);
     const msgTxt = await JSON.parse(postedContent).message_txt
+    //var Gun = require('gun');
     if (msgTxt !== '') {
-        handlePost(msgTxt)(openpgp)(localStorage)('royale')()
+        handlePost(msgTxt)(openpgp)(localStorage)('royale')(gun)
         .then((resultMessage) => {
             //console.log('handlePost --> ' + resultMessage);
             return ctx.render('message', {
