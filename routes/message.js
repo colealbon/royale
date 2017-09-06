@@ -2,9 +2,15 @@ const router = require('koa-router')();
 const config = require(__dirname + '/../config/options.js');
 const fs = require('fs');
 const memoize = require('memoizee');
-const util = require(__dirname + '/../src/lib/util.js');
-
 var openpgp = require('../test/openpgp162/openpgp.js');
+const handlePost = require('../src/lib/handlePost.js').handlePost;
+const Storage = require('dom-storage');
+var Gun = require('gun');
+var gun = Gun({
+    file: 'gundata.json'
+})
+
+let localStorage = new Storage('./royale-storage.json', { strict: false, ws: '  ' });
 
 const slow_get_server_privkey = function slow_get_server_pubkey() {
     return fs.readFileSync(config.server_privkey_file, "utf8")
@@ -30,7 +36,7 @@ const get_server_privkey = memoize(slow_get_server_privkey);
 // };
 // const decrypt_content = memoize(slow_decrypt_content);
 //
-const slowCleanContent = function slowCleanCcontent( posted_txt ) {
+const slowCleanContent = function slowCleanContent( posted_txt ) {
     return posted_txt
         .replace(/\\r\\n/g, '\r\n')
         .replace(/"/g, '');
@@ -47,29 +53,46 @@ const cleanContent = memoize(slowCleanContent);
 // const get_user_from_pubkey = memoize(slow_get_user_from_pubkey);
 
 router.get('/', async (ctx, next) => {
+    // console.log(config.app_name)
     return ctx.render('message', {
-        app_name: config.app_name,
+        app_name: config.app_name
     })
 });
 
 router.post('/', async (ctx, next) => {
-    //console.log('11111111', ctx.request.body)
     const postedContent = await JSON.stringify(ctx.request.body);
-    const msg_txt = await JSON.parse(postedContent).message_txt
-    const classification = await util.classifyContent(msg_txt)(openpgp);
-    // console.log(classification)
-    // console.log(classification);
-    // const privkey_txt = await get_server_privkey();
-    // const cleaned_privkey = await clean_content(privkey_txt);
-    // var decrypted_txt;
-    // try {
-    //     decrypted_txt = await decrypt_content(cleaned_privkey, cleaned_txt)
-    // }
-    // catch (err) {
-    //     //console.log(err);
-    // }
-    // console.log(decrypted_txt);
-    // const client_userid = await get_user_from_pubkey(decrypted_txt);
+    const msgTxt = await JSON.parse(postedContent).message_txt
+    //var Gun = require('gun');
+    if (msgTxt !== '') {
+        handlePost(msgTxt)(openpgp)(localStorage)('royale')(gun)
+        .then((resultMessage) => {
+            //console.log('handlePost --> ' + resultMessage);
+            return ctx.render('message', {
+                app_name: config.app_name,
+                result_message: resultMessage
+                //client_userid: client_userid,
+                //client_pubkey_txt: decrypted_txt
+            })
+        })
+        .catch(err => {
+            console.error(err)
+            return ctx.render('errormsg', {
+                app_name: config.app_name,
+                error_message: err.message_txt
+            })
+        });
+        // const privkey_txt = await get_server_privkey();
+        // const cleaned_privkey = await clean_content(privkey_txt);
+        // var decrypted_txt;
+        // try {
+        //     decrypted_txt = await decrypt_content(cleaned_privkey, cleaned_txt)
+        // }
+        // catch (err) {
+        //     //console.log(err);
+        // }
+        // console.log(decrypted_txt);
+        // const client_userid = await get_user_from_pubkey(decrypted_txt);
+    }
     return ctx.render('message', {
         app_name: config.app_name
         //client_userid: client_userid,

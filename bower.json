@@ -1,5 +1,5 @@
 {
-  "name": "hotlips",
+  "name": "royale",
   "description": "practice",
   "main": "app.js",
   "authors": [
@@ -12,7 +12,7 @@
     "webpack",
     "babel"
   ],
-  "homepage": "https://github.com/colealbon/hotlips",
+  "homepage": "https://github.com/colealbon/royale",
   "ignore": [
     "**/.*",
     "node_modules",

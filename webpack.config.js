@@ -1,7 +1,8 @@
 module.exports = {
     context: __dirname,
+    devtool: 'inline-source-map',
     entry: {
-        hotlips: './src/index.js'
+        royale: './src/index.js'
     },
     output: {
         path: __dirname + '/dist',
@@ -17,7 +18,7 @@ module.exports = {
                 test: /\.js$/,
                 loader: 'babel-loader',
                 query: {
-                    presets: ['es2015']
+                    presets: ['es2017']
                 }
             }
         ]
