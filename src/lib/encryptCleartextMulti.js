@@ -18,32 +18,25 @@ export function encryptCleartextMulti(content) {
             Promise.reject('Error: missing localStorage'):
             new Promise((resolve, reject) => {
                 try {
+                    let encryptQueue = [];
                     getFromStorage(localStorage)()
                     .then((storageArr) => {
-                        //let publicKeyArr = [];
-                        let encryptedMsgs = [];
-                        let i = storageArr.length;
-                        let idx = 0;
                         storageArr
                         .map((storageItem) => {
-                            i--;
-                            return storageItem;
+                            try {
+                                determineContentType(storageItem)(openpgp)
+                                .then((contentType) => {
+                                    if (contentType === PGPPUBKEY) {
+                                        encryptQueue.push(encryptClearText(openpgp)(storageItem)(content))
+                                    }
+                                })
+                            } catch (error) {}
                         })
-                        .filter(storageItem => (!storageItem) ? false : true)
-                        .map((storageItem) => {
-                            determineContentType(storageItem)(openpgp)
-                            .then((contentType) => {
-                                if (contentType === PGPPUBKEY) {
-                                    encryptClearText(openpgp)(storageItem)(content)
-                                    .then((encrypted) => {
-                                        encryptedMsgs[idx] = encrypted;
-                                        idx++;
-                                        if (i === 0) {
-                                            resolve(encryptedMsgs);
-                                        }
-                                    })
-                                }
-                            })
+                    })
+                    process.nextTick(() => {
+                        Promise.all(encryptQueue)
+                        .then((encryptedArr) => {
+                            resolve(encryptedArr)
                         })
                     })
                 } catch (err) {

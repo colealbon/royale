@@ -31,7 +31,6 @@ export function decryptPGPMessageWithKey(openpgp) {
                             } else {
                                 openpgp.decrypt({ 'message': message, 'privateKey': privKeyObj })
                                 .then(result => {
-                                    console.log(result.data)
                                     resolve(result.data);
                                 })
                             };

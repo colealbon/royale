@@ -45,8 +45,8 @@ app.use(koaBodyParser({
     return next();
 })
 .use(router.routes())
+.use(router.allowedMethods())
 .use(Gun.serve);
-//.use(router.routes(), router.allowedMethods());
 
 app.on('error', (err, ctx) => {
     logger.error('server error', err, ctx);

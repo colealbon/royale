@@ -87,7 +87,7 @@ suite('decryptPGPMessageWithKey', function() {
                     }
                     decryptPGPMessageWithKey(openpgp)(config.server_privkey_password)(privateKeyArmor)(PGPMessageArmor)
                     .then((decrypted) => {
-                        assert.notEqual(decrypted.indexOf('00000000000000000193fe4e5cfd382200c27199e19c73844be6b70b377a1b59'), -1);
+                        assert.equal(decrypted, 'test client to server');
                         resolve();
                     })
                     .catch((error) => {

@@ -20,21 +20,29 @@ export function decryptPGPMessage(openpgp) {
                 return (!PGPMessageArmor) ?
                 Promise.reject('Error: missing PGPMessageArmor'):
                 new Promise((resolve, reject) => {
+                    let decryptQueue = [];
                     getFromStorage(localStorage)()
                     .then(storeArr => {
                         try {
-                            return storeArr
-                            .filter(storageItem => (!storageItem) ? false : true)
-                            .map(storageItem => determineContentType(storageItem)(openpgp)
-                                .then(contentType => {
-                                    if (contentType === PGPPRIVKEY) {
-                                        decryptPGPMessageWithKey(openpgp)(password)(storageItem)(PGPMessageArmor)
-                                        .then(decrypted => {
-                                            resolve(decrypted)
-                                        });
-                                    }
+                            storeArr
+                            .map(storageItem => {
+                                try {
+                                    determineContentType(storageItem)(openpgp)
+                                    .then(contentType => {
+                                        console.log('contentType', contentType)
+                                        if (contentType === PGPPRIVKEY) {
+                                            console.log('privateKey')
+                                            decryptQueue.push(decryptPGPMessageWithKey(openpgp)(password)(storageItem)(PGPMessageArmor))
+                                        }
+                                    })
+                                } catch (error) {}
+                            })
+                            process.nextTick(() => {
+                                Promise.all(decryptQueue)
+                                .then((decryptedArr) => {
+                                    resolve(decryptedArr[0])
                                 })
-                            )
+                            })
                         } catch(err) {
                             reject(err);
                         }

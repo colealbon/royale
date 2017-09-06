@@ -1,16 +1,19 @@
 {% block gundb %}
 <script id="gun_script">
-    console.log(location.origin + '/gun');
-    var gun = Gun(location.origin + '/gun');
-    //gun.get('').put({hello: "world"});
 
-    var ref = gun.get('royale');
-    ref.on(function(data){
-        document.getElementById("gun_data").innerHTML=(JSON.stringify(data.royale) || 'gundb broken?');
+    var gun = Gun(location.origin + '/gun');
+    openpgp.config.aead_protect = true
+    openpgp.initWorker({ path:'/js/openpgp.worker.js' })
+
+    var refMessage = gun.get('message');
+
+    refMessage.on(function(data){
+        window.handleMessage(data.message)(openpgp)(window.localStorage)('royale')(gun);
     });
-    setInterval(function() {
-        gun.get('royale').put({royale: Date.now()})
-    }, 3000);
-    
+    // 
+    // setInterval(function() {
+    //     gun.get('message').put({message: Date.now()})
+    // }, 3000);
+    //
 </script>
 {% endblock %}

@@ -26,7 +26,7 @@ navigate to localhost:3000 (or settings from config/options.js)
 - ~~Install [gundb](http://gun.js.org/)~~
 - ~~make a [deck of cards](https://github.com/colealbon/royale/blob/master/views/partials/freshdeck.html)~~
 - ~~install rebel router~~
-- [Alice and Bob exchange keys](http://localhost:3000/#/message)
+- ~~[Alice and Bob exchange keys](http://localhost:3000/#/message)~~
 - [Mental Poker](https://en.wikipedia.org/wiki/Mental_poker)
   - Alice and Bob agree on a certain "deck" of cards. In practice, this means they agree on a set of numbers or other data such that each element of the set represents a card.
   - Alice picks an encryption key A and uses this to encrypt each card of the deck.
