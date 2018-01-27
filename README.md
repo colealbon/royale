@@ -1,9 +1,9 @@
-# hotlips
-seed/starter project using koa2, rebel-router
+# royale
+p2p seed/starter project using koa2, rebel-router
 * [test driven](https://github.com/colealbon/hotlips/tree/master/test) javascript development
 * [isomorphic functions](https://github.com/colealbon/hotlips/blob/master/src/lib/)
-* serverless immutable transactions
-* use of pgp cryptographic primitives
+* gundb serverless immutable transactions
+* use of pgp cryptographic functions
 * webpack deployment
 * es7 async/await flow control (or at least promise based)
 * heavy use of promise aware partial application (anticipating aggressive memoize caching)
