@@ -22,7 +22,7 @@ export function savePGPPubkey(PGPkeyArmor) {
                 let PGPkey = openpgp.key.readArmored(PGPkeyArmor);
                 notEmpty(PGPkeyArmor)
                 .then(() => notCleartext(PGPkeyArmor)(openpgp))
-                .then(() => notPGPPrivkey(PGPkeyArmor)(openpgp))
+                .then(() => notPGPPrivkey(openpgp)(PGPkeyArmor))
                 .then(() => notPGPMessage(PGPkeyArmor)(openpgp))
                 .then(() => getFromStorage(localStorage)(PGPkey.keys[0].users[0].userId.userid))
                 .then(existingKey => {

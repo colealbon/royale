@@ -13,7 +13,7 @@ export function broadcastMulti(content) {
             Promise.reject(new Error('missing openpgp')) :
             notEmpty(content)
             .then((content) => {
-                return notPGPPrivkey(content)(openpgp)
+                return notPGPPrivkey(openpgp)(content)
             })
             .then((content) => {
                 return new Promise((resolve, reject) => {
@@ -21,7 +21,7 @@ export function broadcastMulti(content) {
                         const id = 'royale';
                         let broadcastQueue = [];
                         content.map((message) => {
-                            broadcastQueue.push(broadcast(message)(gun)(openpgp))
+                            broadcastQueue.push(broadcast(openpgp)(gun)(message))
                         })
                         Promise.all(broadcastQueue, (result) => resolve(result));
                     } catch (error) {

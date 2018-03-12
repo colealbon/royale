@@ -24,15 +24,20 @@ import {broadcast} from '../../src/lib/broadcast.js';
 
 suite('broadcast ', function() {
 
-    test('broadcast throws error on no content', function() {
-        return broadcast()
-        .then((result) => assert.equal(result, 'not a valid code path'))
-        .catch(err => assert.equal(err.message, 'missing content'));
-    });
+	test('broadcast throws "missing openpgp" if not called with openpgp', function testBroadcast() {
+		const content = 'abcdefghijklmnopqrstuvwxyz'
+		return broadcast()
+		.then(() => {
+			assert.notEqual(1, 1);
+		})
+		.catch(err => {
+			assert.equal(err.message, 'missing openpgp')
+		})
+	});
 
     test('broadcast throws "missing gundb" if not called with gundb', function testBroadcast() {
         const content = 'abcdefghijklmnopqrstuvwxyz'
-        return broadcast(content)()
+        return broadcast(openpgp)()
         .then(() => {
             assert.notEqual(1, 1);
         })
@@ -41,15 +46,10 @@ suite('broadcast ', function() {
         })
     });
 
-    test('broadcast throws "missing openpgp" if not called with openpgp', function testBroadcast() {
-        const content = 'abcdefghijklmnopqrstuvwxyz'
-        return broadcast(content)(gun)()
-        .then(() => {
-            assert.notEqual(1, 1);
-        })
-        .catch(err => {
-            assert.equal(err.message, 'missing openpgp')
-        })
+	test('broadcast throws error on no content', function() {
+        return broadcast(openpgp)(gun)()
+        .then((result) => assert.equal(result, 'not a valid code path'))
+        .catch(err => assert.equal(err.message, 'missing content'));
     });
 
     test('broadcast happy path PGP Message', function testBroadcast() {
@@ -60,11 +60,11 @@ suite('broadcast ', function() {
                 }
                 gun.get('message').map().on(function(message, id){
                     if(message) {
-                        assert.equal(message, PGPMessageArmor);
+                        assert.equal(`${message}\n`, PGPMessageArmor);
                         resolve()
                     }
                 });
-                broadcast(PGPMessageArmor)(gun)(openpgp)
+                broadcast(openpgp)(gun)(PGPMessageArmor)
                 .catch((error) => {
                     reject(error);
                 })
@@ -78,7 +78,7 @@ suite('broadcast ', function() {
                 if (err) {
                     reject(err);
                 }
-                broadcast(PGPPrivateKey)(gun)(openpgp)
+                broadcast(openpgp)(gun)(PGPPrivateKey)
                 .then((broadcastResult) => {
                     assert.notEqual(1, 1);
                 })
