@@ -40,7 +40,7 @@
     "koa-nunjucks-next": "^1.1.1",
     "koa-router": "^7.2.0",
     "koa-static": "^3.0.0",
-    "memoizee": "^0.4.1",
+    "memoizee": "^0.4.12",
     "mocha": "^3.4.2",
     "node-fetch": "^1.7.0",
     "nunjucks": "^3.0.1",

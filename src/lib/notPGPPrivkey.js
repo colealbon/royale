@@ -1,7 +1,8 @@
 'use strict';
-
+let memoize = require('memoizee');
 import notEmpty from '../../src/lib/notEmpty.js';
-export default function notPGPPrivkey(openpgp) {
+
+let slow_notPGPPrivkey = function (openpgp) {
     return (!openpgp) ?
     Promise.reject(new Error('missing openpgp')):
     (content) => {
@@ -21,3 +22,7 @@ export default function notPGPPrivkey(openpgp) {
         });
     }
 };
+
+let notPGPPrivkey = memoize(slow_notPGPPrivkey, { promise: true });
+
+export default notPGPPrivkey;

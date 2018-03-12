@@ -26,7 +26,7 @@ export function handlePost(content) {
                             if (contentType === CLEARTEXT) {
                                 encryptCleartextMulti(content)(openpgp)(localStorage)
                                 .then((encrypted) => {
-                                    broadcastMulti(encrypted)(gundb)(openpgp)
+                                    broadcastMulti(openpgp)(gundb)(encrypted)
                                     .then((result) => {
                                         console.log(result);
                                         resolve(result);
@@ -46,7 +46,7 @@ export function handlePost(content) {
                                 })
                             }
                             if (contentType === PGPMESSAGE) {
-                                broadcast(content)(gun)(openpgp)
+                                broadcast(openpgp)(gun)(content)
                                 .then(result => resolve(result))
                             }
                         })
