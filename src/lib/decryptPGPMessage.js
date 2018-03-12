@@ -27,7 +27,7 @@ export function decryptPGPMessage(openpgp) {
                             storeArr
                             .map(storageItem => {
                                 try {
-                                    determineContentType(storageItem)(openpgp)
+                                    determineContentType(openpgp)(storageItem)
                                     .then(contentType => {
                                         console.log('contentType', contentType)
                                         if (contentType === PGPPRIVKEY) {

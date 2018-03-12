@@ -2,13 +2,13 @@
 
 import {determineKeyType} from './determineKeyType.js';
 
-export function determineContentType(content) {
-    // usage: determineContentType(content)(openpgp).then(result => result)
-    return (!content) ?
-    Promise.resolve(''):
-    (openpgp) => {
-        return (!openpgp) ?
-        Promise.reject('Error: missing openpgp'):
+export function determineContentType(openpgp) {
+    // usage: determineContentType(openpgp)(content).then(result => result)
+    return (!openpgp) ?
+    Promise.reject('Error: missing openpgp'):
+    (content) => {
+        return (!content) ?
+        Promise.resolve(''):
         new Promise((resolve, reject) => {
             const CLEARTEXT = 'cleartext';
             const PGPMESSAGE = 'PGPMessage';

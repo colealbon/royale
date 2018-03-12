@@ -12,21 +12,21 @@ import {determineContentType} from '../../src/lib/determineContentType.js';
 var openpgp = require('../../test/openpgp162/openpgp.js');
 
 suite('determineContentType', function() {
-    test('determineContentType throws error on no content', function() {
-        return determineContentType()
-        .catch(err => assert.equal(err.toString(), 'Error: missing content'));
-    });
     test('determineContentType throws error on missing openpgp', function() {
-        return determineContentType('fakedata')()
+        return determineContentType()
         .catch(err => assert.equal(err.toString(), 'Error: missing openpgp'));
     });
+    test('determineContentType throws error on missing content', function() {
+        return determineContentType(openpgp)()
+        .catch(err => assert.equal(err.toString(), 'Error: missing content'));
+    });
     test('determineContentType happy path unclassified fake data', function() {
-        return determineContentType('fakedata')(openpgp)
+        return determineContentType(openpgp)('fakedata')
         .then(response => assert.equal(response, 'cleartext'))
         .catch(err => assert.equal(err.toString(), 'this code path should be dead'));
     });
     test('determineContentType happy path private key', function() {
-            return determineContentType(`
+            return determineContentType(openpgp)(`
 -----BEGIN PGP PRIVATE KEY BLOCK-----
 
 lQc9BFiFbAsBEADECyRFjCecc5sW76qo5vsBj/2gaMS2BTt6o4bGb+KpDulANXJT
@@ -134,14 +134,14 @@ wDM11yrM3S6t
 =bF8E
 -----END PGP PRIVATE KEY BLOCK-----
 
-    `)(openpgp)
+    `)
         .then(response => assert.equal(response, 'PGPPrivkey'))
         .catch(error => {
             assert.equal(error, 'caught error')
         })
     });
     test('determineContentType happy path public key', function() {
-        return determineContentType(`
+        return determineContentType(openpgp)(`
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 
 mQINBFiFbAsBEADECyRFjCecc5sW76qo5vsBj/2gaMS2BTt6o4bGb+KpDulANXJT
@@ -192,7 +192,7 @@ a+WGYTHHM8D7ZOiu6ztr5S1AI6ihAooo5H43PoObYsMn2cZQtRUDlVR2KLRj4994
 79WezPV17gSqaIkCMJRjCc5cMsx0C2pn5slRe30vK8AzNdcqzN0urQ==
 =J8X0
 -----END PGP PUBLIC KEY BLOCK-----
-    `)(openpgp)
+    `)
         .then(response => assert.equal(response, 'PGPPubkey'))
         .catch(error => {
             console.log(error);
@@ -200,7 +200,7 @@ a+WGYTHHM8D7ZOiu6ztr5S1AI6ihAooo5H43PoObYsMn2cZQtRUDlVR2KLRj4994
         })
     });
     test('determineContentType happy path pgp message', function() {
-            return determineContentType(`
+            return determineContentType(openpgp)(`
 -----BEGIN PGP MESSAGE-----
 
 hQIMA0bt80axx5bJAQ/9GhmdJbcYwZIvK/782D13H8+FJWr1aSq4WMRjRJnKOHwL
@@ -218,7 +218,7 @@ SgEePD1t1pvowvu4/dn0Ja10oyo20eTqtTFfrRw5ROeZafswVDrC5q5KAFfm2Q2W
 G7Pw9EktJ8t0DvuKMjl9CsI7cY6BDXs3Jn4J
 =rfvU
 -----END PGP MESSAGE-----
-    `)(openpgp)
+    `)
         .then(response => assert.equal(response, 'PGPMessage'))
         .catch(error => {
             console.log(error);

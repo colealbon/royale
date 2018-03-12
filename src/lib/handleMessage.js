@@ -9,17 +9,17 @@ const CLEARTEXT = 'cleartext';
 const PGPPRIVKEY = 'PGPPrivkey';
 const PGPMESSAGE = 'PGPMessage';
 
-export function handleMessage(content) {
-    return (!content) ?
-    Promise.resolve('') :
-    (openpgp) => {
-        return (!openpgp) ?
-        Promise.reject('Error: missing openpgp'):
+export function handleMessage(openpgp) {
+    return (!openpgp) ?
+    Promise.reject('Error: missing openpgp'):
+    (content) => {
+        return (!content) ?
+        Promise.resolve('') :
         (localStorage) => {
             return (password) => {
                 return () => {
                     return new Promise((resolve, reject) => {
-                        determineContentType(content)(openpgp)
+                        determineContentType(openpgp)(content)
                         .then(contentType => {
                             console.log(contentType)
                             if (contentType === PGPPUBKEY) {

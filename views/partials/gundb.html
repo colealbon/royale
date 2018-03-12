@@ -8,9 +8,9 @@
     var refMessage = gun.get('message');
 
     refMessage.on(function(data){
-        window.handleMessage(data.message)(openpgp)(window.localStorage)('royale')(gun);
+        window.handleMessage(openpgp)(data.message)(window.localStorage)('royale')(gun);
     });
-    // 
+    //
     // setInterval(function() {
     //     gun.get('message').put({message: Date.now()})
     // }, 3000);

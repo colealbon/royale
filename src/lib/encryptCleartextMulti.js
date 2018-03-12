@@ -6,16 +6,16 @@ import {encryptClearText} from './encryptClearText';
 
 const PGPPUBKEY = 'PGPPubkey';
 
-export function encryptCleartextMulti(content) {
-    // usage: encryptCleartextMulti(content)(openpgp)(localStorage).then(result => result)
-    return (!content) ?
-    Promise.reject('Error: missing content'):
-    (openpgp) => {
-        return (!openpgp) ?
-        Promise.reject('Error: missing openpgp'):
-        (localStorage) => {
-            return (!localStorage) ?
-            Promise.reject('Error: missing localStorage'):
+export function encryptCleartextMulti(openpgp) {
+    // usage: encryptCleartextMulti(openpgp)(localstorage)(content).then(result => result)
+    return (!openpgp) ?
+    Promise.reject('Error: missing openpgp'):
+    (localStorage) => {
+        return (!localStorage) ?
+        Promise.reject('Error: missing localstorage'):
+        (content) => {
+            return (!content) ?
+            Promise.reject('Error: missing content'):
             new Promise((resolve, reject) => {
                 try {
                     let encryptQueue = [];
@@ -24,7 +24,7 @@ export function encryptCleartextMulti(content) {
                         storageArr
                         .map((storageItem) => {
                             try {
-                                determineContentType(storageItem)(openpgp)
+                                determineContentType(openpgp)(storageItem)
                                 .then((contentType) => {
                                     if (contentType === PGPPUBKEY) {
                                         encryptQueue.push(encryptClearText(openpgp)(storageItem)(content))

@@ -37,6 +37,7 @@ suite('message page', function() {
             assert.equal(res.ok, true);
             return
         })
+        .catch((error) => console.log(error))
     });
     test('post happy path private key', function() {
         let privatekeystr = [

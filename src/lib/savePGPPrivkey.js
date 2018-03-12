@@ -1,16 +1,16 @@
 'use strict';
 
-export function savePGPPrivkey(PGPkeyArmor) {
+export function savePGPPrivkey(openpgp) {
     // save private key to storage no questions asked
     // usage: savePGPPrivkey(content)(openpgp)(localStorage).then(result => result)
-    return (!PGPkeyArmor) ?
-    Promise.reject('Error: missing PGPkeyArmor'):
-    (openpgp) => {
-        return (!openpgp) ?
-        Promise.reject('Error: missing openpgp'):
-        (localStorage) => {
-            return (!localStorage) ?
-            Promise.reject('Error: missing localStorage'):
+    return (!openpgp) ?
+    Promise.reject('Error: missing openpgp'):
+    (localStorage) => {
+        return (!localStorage) ?
+        Promise.reject('Error: missing localStorage'):
+        (PGPkeyArmor) => {
+            return (!PGPkeyArmor) ?
+            Promise.reject('Error: missing PGPkeyArmor'):
             new Promise((resolve, reject) => {
                 try {
                     let PGPkey = openpgp.key.readArmored(PGPkeyArmor);

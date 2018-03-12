@@ -64,9 +64,10 @@ router.post('/', async (ctx, next) => {
     const msgTxt = await JSON.parse(postedContent).message_txt
     //var Gun = require('gun');
     if (msgTxt !== '') {
+        console.log('HANDLE POST')
         handlePost(msgTxt)(openpgp)(localStorage)('royale')(gun)
         .then((resultMessage) => {
-            //console.log('handlePost --> ' + resultMessage);
+            console.log('handlePost --> ' + resultMessage);
             return ctx.render('message', {
                 app_name: config.app_name,
                 result_message: resultMessage

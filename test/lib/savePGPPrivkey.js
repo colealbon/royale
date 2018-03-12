@@ -11,16 +11,16 @@ import {handlePost} from '../../src/lib/handlePost.js';
 
 var openpgp = require('../../test/openpgp162/openpgp.js');
 
-suite('handlePost', function() {
-    test('handlePost returns nothing on no content', function() {
-        return handlePost()
-        .then((content) => assert.equal(content, ''))
-        .catch(err => assert.equal(true, false));
-    });
+suite('savePGPPrivkey', function() {
     test('handlePost throws error on missing openpgp', function() {
-        return handlePost('fakedata')()
+        return handlePost()
         .catch(err => assert.equal(err.toString(), 'Error: missing openpgp'));
     });
+    // test('savePGPPrivkey returns nothing on no content', function() {
+    //     return handlePost(openpgp)()()()''
+    //     .then((content) => assert.equal(content, ''))
+    //     .catch(err => assert.equal(true, false));
+    // });
     // test('handlePost happy path unclassified fake data', function() {
     //     let localStorage = new Storage('./db.json', { strict: false, ws: '  ' });
     //     return handlePost('bubblegum')(openpgp)(localStorage)()
@@ -33,55 +33,55 @@ suite('handlePost', function() {
     //     })
     //     .catch(err => assert.equal(err.toString(), 'this code path should be dead'));
     // });
-    test('handlePost happy path public key', function() {
-        let localStorage = new Storage('./db.json', { strict: false, ws: '  ' });
-        return handlePost(`
------BEGIN PGP PUBLIC KEY BLOCK-----
-Version: GnuPG v2
-
-mQENBFgqlVYBCAC6kSJzAJqvsh2hcnOScEJwPirTiInjzVeSrTKnF5MCnfFIL8zX
-OjElEDiMvoNWPh3aXZQ6MriCPkn1ECRR5O5eOm9ImTW1/y9vfbdPaU2masznwcF3
-bDzp43Tt5SGK+qFfZbQQOs9JYrXYhblevRElKmf+WgeUGQtYWCQQYjT0sFY2TR+u
-8zIXMcSY41y5wYmMq7AamfPo/9sulSSbHmxakTOYpmZIDGhEiBo7KH9rsek9ZQU9
-MZEyWyPUqHiWGL82F5F3yy4NK5vLUu8RaiVHrbMPrEqgkPTIIlSMo512vQ608hJa
-v1Ee28xP6bHdvZeVyqSUcY2Rdoexh+CQ1DOZABEBAAG0E3Rlc3RfY2xpZW50XzAw
-MDAwMDGJATkEEwEIACMFAlgqlVYCGwMHCwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIX
-gAAKCRDO29wCZYLZsgzXB/48K09OgCZc9SrnsM/OOXbRcfD66bi7ivASM1VsKReN
-4LvOG+QhTFcoj/HxJ+EnTXqz2XhxtUvIas33AI33Sip9XZ2Pt0klAWBjbmEiN7nM
-tVfgxcB5MU4XSfcvunW9I0EnoR0FlpHyMIS9mTuMVNsOz4WfK4Xy0ipRWAWcX+I+
-cLYFpZ41jgcECYb9SsTOWkspBMXkfGMycHisKDPGLYBrsZIuCGdL0vmGmkUlm3BG
-psnDwW22ZHydwT/qUKsBeS0vouxfXTyZChpZhJeSf6usGEOH8lBbs4KmlyfXnx7l
-FNUZmr4STDvPCVbZ4U/zLNU3Z2xKEI2UmpPtgqlwMlzAuQENBFgqlVYBCACz5W+7
-LoF/jYBH6ud5HpW2oGztQWCW5tbSm0IesiqUXanuRsBd22lOcRNwTjtIW/OjvfM5
-PCGknr09gOWHyp3+UX4W5VPoigA4OJjKDNqhqIyWLFHJqzE1BsrD4YmlTvbvg/f2
-xZk2dxVlMX3M1vwjrhSZweKEq8vWtKnMllywyMn2JAjjimqsEHUcZ5yXrm3cQl/p
-ZRSmZXM4gUaag47koWDlojyl58tXVDAl763SzsmCj2pDYv2SMBPuAxTI6NfWmV+g
-rkIMgg+nahZeFKVwG2hdWS1RByRGZkx+zZ/LZ2TnDs0Zc/HZmt6zC7c+elQSBgRS
-vmpipiUHaW2mHpXFABEBAAGJAR8EGAEIAAkFAlgqlVYCGwwACgkQztvcAmWC2bID
-gggAo/wh++bsL0nbvwc4rRIvlq75wtJWGlW3JQ0AWe0O+FYXF7LfyjMn1Nf95jyV
-v0qNfb83HqFmnMhcod6sKcLBYbarjxdDiqg0tuLsuwx6zjJfHN6rxU4pWyQ9YQZt
-FTDUQu7z2fdbsyoxImI1nl1OWfV+AsLo+JPYzgPRExCHI51VPzQ8z/9GEqv3PfXb
-n1wgsuNsqps9DJ8yJE2RcdpWba3RfL9fKDiet4Qpt9u/++e2++SMlliykaKo0oHy
-pvoIvX5766bGVIqGyh8DtuzmlWNvkjoTTkJ96Gn66AM1NjRVxs6aW0ndvKY0DCVI
-Jh3lPln3y0XSF6yYtUukvOLKtw==
-=xC4H
------END PGP PUBLIC KEY BLOCK-----`)(openpgp)(localStorage)()
-        .then(result => {
-            //console.log(result)
-            var fromStorage = localStorage.getItem('test_client_0000001');
-            var keyFromStorage = openpgp.key.readArmored(fromStorage);
-            var userFromKey = keyFromStorage.keys[0].users[0].userId.userid
-            assert.equal(userFromKey , 'test_client_0000001')
-        })
-        .catch(error => {
-            console.log(error);
-            assert.equal(error, 'caught error')
-        })
-    });
+//     test('handlePost happy path public key', function() {
+//         let localStorage = new Storage('./db.json', { strict: false, ws: '  ' });
+//         return handlePost(`
+// -----BEGIN PGP PUBLIC KEY BLOCK-----
+// Version: GnuPG v2
+//
+// mQENBFgqlVYBCAC6kSJzAJqvsh2hcnOScEJwPirTiInjzVeSrTKnF5MCnfFIL8zX
+// OjElEDiMvoNWPh3aXZQ6MriCPkn1ECRR5O5eOm9ImTW1/y9vfbdPaU2masznwcF3
+// bDzp43Tt5SGK+qFfZbQQOs9JYrXYhblevRElKmf+WgeUGQtYWCQQYjT0sFY2TR+u
+// 8zIXMcSY41y5wYmMq7AamfPo/9sulSSbHmxakTOYpmZIDGhEiBo7KH9rsek9ZQU9
+// MZEyWyPUqHiWGL82F5F3yy4NK5vLUu8RaiVHrbMPrEqgkPTIIlSMo512vQ608hJa
+// v1Ee28xP6bHdvZeVyqSUcY2Rdoexh+CQ1DOZABEBAAG0E3Rlc3RfY2xpZW50XzAw
+// MDAwMDGJATkEEwEIACMFAlgqlVYCGwMHCwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIX
+// gAAKCRDO29wCZYLZsgzXB/48K09OgCZc9SrnsM/OOXbRcfD66bi7ivASM1VsKReN
+// 4LvOG+QhTFcoj/HxJ+EnTXqz2XhxtUvIas33AI33Sip9XZ2Pt0klAWBjbmEiN7nM
+// tVfgxcB5MU4XSfcvunW9I0EnoR0FlpHyMIS9mTuMVNsOz4WfK4Xy0ipRWAWcX+I+
+// cLYFpZ41jgcECYb9SsTOWkspBMXkfGMycHisKDPGLYBrsZIuCGdL0vmGmkUlm3BG
+// psnDwW22ZHydwT/qUKsBeS0vouxfXTyZChpZhJeSf6usGEOH8lBbs4KmlyfXnx7l
+// FNUZmr4STDvPCVbZ4U/zLNU3Z2xKEI2UmpPtgqlwMlzAuQENBFgqlVYBCACz5W+7
+// LoF/jYBH6ud5HpW2oGztQWCW5tbSm0IesiqUXanuRsBd22lOcRNwTjtIW/OjvfM5
+// PCGknr09gOWHyp3+UX4W5VPoigA4OJjKDNqhqIyWLFHJqzE1BsrD4YmlTvbvg/f2
+// xZk2dxVlMX3M1vwjrhSZweKEq8vWtKnMllywyMn2JAjjimqsEHUcZ5yXrm3cQl/p
+// ZRSmZXM4gUaag47koWDlojyl58tXVDAl763SzsmCj2pDYv2SMBPuAxTI6NfWmV+g
+// rkIMgg+nahZeFKVwG2hdWS1RByRGZkx+zZ/LZ2TnDs0Zc/HZmt6zC7c+elQSBgRS
+// vmpipiUHaW2mHpXFABEBAAGJAR8EGAEIAAkFAlgqlVYCGwwACgkQztvcAmWC2bID
+// gggAo/wh++bsL0nbvwc4rRIvlq75wtJWGlW3JQ0AWe0O+FYXF7LfyjMn1Nf95jyV
+// v0qNfb83HqFmnMhcod6sKcLBYbarjxdDiqg0tuLsuwx6zjJfHN6rxU4pWyQ9YQZt
+// FTDUQu7z2fdbsyoxImI1nl1OWfV+AsLo+JPYzgPRExCHI51VPzQ8z/9GEqv3PfXb
+// n1wgsuNsqps9DJ8yJE2RcdpWba3RfL9fKDiet4Qpt9u/++e2++SMlliykaKo0oHy
+// pvoIvX5766bGVIqGyh8DtuzmlWNvkjoTTkJ96Gn66AM1NjRVxs6aW0ndvKY0DCVI
+// Jh3lPln3y0XSF6yYtUukvOLKtw==
+// =xC4H
+// -----END PGP PUBLIC KEY BLOCK-----`)(openpgp)(localStorage)()
+//         .then(result => {
+//             //console.log(result)
+//             var fromStorage = localStorage.getItem('test_client_0000001');
+//             var keyFromStorage = openpgp.key.readArmored(fromStorage);
+//             var userFromKey = keyFromStorage.keys[0].users[0].userId.userid
+//             assert.equal(userFromKey , 'test_client_0000001')
+//         })
+//         .catch(error => {
+//             console.log(error);
+//             assert.equal(error, 'caught error')
+//         })
+//     });
 
     test('handlePost happy path private key', function() {
         let localStorage = new Storage('./db.json', { strict: false, ws: '  ' });
-        return handlePost(`
+        return handlePost(openpgp)(localStorage)(`
 -----BEGIN PGP PRIVATE KEY BLOCK-----
 
 lQc9BFiFbAsBEADECyRFjCecc5sW76qo5vsBj/2gaMS2BTt6o4bGb+KpDulANXJT
@@ -187,7 +187,7 @@ sBsqO7aCPS7IgrHTj3A6goJr5YZhMcczwPtk6K7rO2vlLUAjqKECiijkfjc+g5ti
 wyfZxlC1FQOVVHYotGPj33jv1Z7M9XXuBKpoiQIwlGMJzlwyzHQLamfmyVF7fS8r
 wDM11yrM3S6t
 =bF8E
------END PGP PRIVATE KEY BLOCK-----`)(openpgp)(localStorage)()
+-----END PGP PRIVATE KEY BLOCK-----`)()
         .then(result => {
             var fromStorage = localStorage.getItem('test_hotlips')
             var keyFromStorage = openpgp.key.readArmored(fromStorage)

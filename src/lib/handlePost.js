@@ -21,25 +21,28 @@ export function handlePost(content) {
             return (password) => {
                 return (gundb) => {
                     return new Promise((resolve, reject) => {
-                        determineContentType(content)(openpgp)
+                        determineContentType(openpgp)(content)
                         .then(contentType => {
+                            console.log('contentType: ', contentType)
                             if (contentType === CLEARTEXT) {
-                                encryptCleartextMulti(content)(openpgp)(localStorage)
+                                encryptCleartextMulti(openpgp)(localStorage)(content)
                                 .then((encrypted) => {
+                                    console.log('encrypted:', encrypted)
                                     broadcastMulti(openpgp)(gundb)(encrypted)
                                     .then((result) => {
-                                        console.log(result);
+                                        console.log('broadcastMulti:', result);
                                         resolve(result);
                                     })
                                     .catch((error) => reject(error));
                                 })
+                                .catch((error) => reject(error));
                             }
                             if (contentType === PGPPRIVKEY) {
-                                savePGPPrivkey(content)(openpgp)(localStorage)
+                                savePGPPrivkey(openpgp)(localStorage)(content)
                                 .then(result => resolve(result))
                             }
                             if (contentType === PGPPUBKEY) {
-                                savePGPPubkey(content)(openpgp)(localStorage)
+                                savePGPPubkey(openpgp)(localStorage)(content)
                                 .then(result => {
                                     console.log(result);
                                     resolve(result)

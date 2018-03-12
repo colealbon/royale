@@ -15,13 +15,13 @@ var openpgp = require('../../test/openpgp162/openpgp.js');
 
 suite('savePGPPubkey', function() {
     test('savePGPPubkey throws error on missing openpgp', function() {
-        return savePGPPubkey('fakedata')()
+        return savePGPPubkey()
         .then((result) => assert.notEqual(1, 'this should have errored'))
         .catch(err => assert.equal(err.toString(), 'Error: missing openpgp'));
     });
     test('savePGPPubkey throws error on cleartext', function() {
         let localStorage = new Storage(config.server_localstorage_file, { strict: false, ws: '  ' });
-        return savePGPPubkey('fakedata')(openpgp)(localStorage)
+        return savePGPPubkey(openpgp)(localStorage)('fakedata')
         .then((result) => assert.notEqual(1, 'this should have errored'))
         .catch(err => assert.equal(err.message, 'cleartext content'));
     });
@@ -32,7 +32,7 @@ suite('savePGPPubkey', function() {
                 if (err) {
                     reject(err);
                 }
-                savePGPPubkey(PGPPubkeyArmor)(openpgp)(localStorage)
+                savePGPPubkey(openpgp)(localStorage)(PGPPubkeyArmor)
                 .then(result => {
                     var fromStorage = localStorage.getItem(config.client_pubkey_user_id);
                     var keyFromStorage = openpgp.key.readArmored(fromStorage);
@@ -53,7 +53,7 @@ suite('savePGPPubkey', function() {
                 if (err) {
                     reject(err);
                 }
-                savePGPPubkey(PGPPrivkeyArmor)(openpgp)(localStorage)
+                savePGPPubkey(openpgp)(localStorage)(PGPPrivkeyArmor)
                 .then((new Error('savePGPPubkey should throw error on PGP Priv key but it does not')))
                 .catch(error => {
                     assert.equal(error.message, 'PGP Privkey content');
@@ -69,7 +69,7 @@ suite('savePGPPubkey', function() {
                 if (err) {
                     reject(err);
                 }
-                savePGPPubkey(PGPMessageArmor)(openpgp)(localStorage)
+                savePGPPubkey(openpgp)(localStorage)(PGPMessageArmor)
                 .then((new Error('savePGPPubkey should throw error on PGP Message but it does not')))
                 .catch(error => {
                     assert.equal(error.message, 'Cannot read property \'users\' of undefined');

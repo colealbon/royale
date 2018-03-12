@@ -7,17 +7,17 @@ import notCleartext from '../../src/lib/notCleartext.js';
 import notPGPPrivkey from '../../src/lib/notPGPPrivkey.js';
 import notPGPMessage from '../../src/lib/notPGPMessage.js';
 
-export function savePGPPubkey(PGPkeyArmor) {
+export function savePGPPubkey(openpgp) {
     // save public key to storage only if it doesn't overwrite a private key
     // usage: savePGPPubkey(content)(openpgp)(localStorage).then(result => result)
-    return (!PGPkeyArmor) ?
-    Promise.reject('Error: missing PGPkeyArmor'):
-    (openpgp) => {
-        return (!openpgp) ?
-        Promise.reject('Error: missing openpgp'):
-        (localStorage) => {
-            return (!localStorage) ?
-            Promise.reject('Error: missing localStorage'):
+    return (!openpgp) ?
+    Promise.reject('Error: missing openpgp'):
+    (localStorage) => {
+        return (!localStorage) ?
+        Promise.reject('Error: missing localStorage'):
+        (PGPkeyArmor) => {
+            return (!PGPkeyArmor) ?
+            Promise.reject('Error: missing PGPkeyArmor'):
             new Promise((resolve, reject) => {
                 let PGPkey = openpgp.key.readArmored(PGPkeyArmor);
                 notEmpty(PGPkeyArmor)
@@ -28,7 +28,7 @@ export function savePGPPubkey(PGPkeyArmor) {
                 .then(existingKey => {
                     return (!existingKey) ?
                     Promise.resolve('none') :
-                    determineContentType(existingKey)(openpgp);
+                    determineContentType(openpgp)(existingKey);
                 })
                 .then(existingKeyType => {
                     if (existingKeyType === 'PGPPrivkey'){
