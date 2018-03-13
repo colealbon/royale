@@ -7,10 +7,10 @@ const assert = chai.assert;
 import notPGPPubkey from '../../src/lib/notPGPPubkey.js';
 var openpgp = require('../../test/openpgp162/openpgp.js');
 
-suite('notPGPPrivkeyey', function() {
+suite('notPGPPubkey', function() {
     test('notPGPPubkey throws "empty content" if content empty', function testnotPGPPubkey() {
         const content = '';
-        return notPGPPubkey(content)()
+        return notPGPPubkey(openpgp)('')
         .then(assert.notEqual('empty content', 'we should never get here'))
         .catch((err) => {
             assert.equal(err.message, 'empty content')
@@ -18,7 +18,7 @@ suite('notPGPPrivkeyey', function() {
     });
 
     test('notPGPPubkey throws "undefined content" if content undefined', function testnotPGPPubkey() {
-        return notPGPPubkey()()
+        return notPGPPubkey(openpgp)()
         .then(testResult => {
             assert.notEqual(1, 1);
         })
@@ -29,7 +29,7 @@ suite('notPGPPrivkeyey', function() {
 
     test('notPGPPubkey throws "missing openpgp" if not called with openpgp', function testnotPGPPubkey() {
         const content = 'abcdefghijklmnopqrstuvwxyz'
-        return notPGPPubkey(content)()
+        return notPGPPubkey()
         .then((content) => {
             assert.notEqual(1, 1);
         })
@@ -57,7 +57,7 @@ SgEePD1t1pvowvu4/dn0Ja10oyo20eTqtTFfrRw5ROeZafswVDrC5q5KAFfm2Q2W
 G7Pw9EktJ8t0DvuKMjl9CsI7cY6BDXs3Jn4J
 =rfvU
 -----END PGP MESSAGE-----`
-        return notPGPPubkey(testContent)(openpgp)
+        return notPGPPubkey(openpgp)(testContent)
         .then((content) => {
             assert.equal(testContent, content)
         })
@@ -126,7 +126,7 @@ vKY0DCVIJh3lPln3y0XSF6yYtUukvOLKtw==
 =Ksff
 -----END PGP PRIVATE KEY BLOCK-----
 `
-        return notPGPPubkey(testContent)(openpgp)
+        return notPGPPubkey(openpgp)(testContent)
         .then((content) => {
             assert.equal(content, testContent);
         })
@@ -167,7 +167,7 @@ Jh3lPln3y0XSF6yYtUukvOLKtw==
 =xC4H
 -----END PGP PUBLIC KEY BLOCK-----
 `
-        return notPGPPubkey(testContent)(openpgp)
+        return notPGPPubkey(openpgp)(testContent)
         .then((content) => {
             assert.notEqual(1, 1)
         })
@@ -178,7 +178,7 @@ Jh3lPln3y0XSF6yYtUukvOLKtw==
 
     test('notPGPPubkey returns content if content is not PGP Content', function testnotPGPPubkey() {
         let content = '123456789';
-        return notPGPPubkey(content)(openpgp)
+        return notPGPPubkey(openpgp)(content)
         .then(testResult => {
             assert.equal(content, testResult);
         })

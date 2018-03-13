@@ -60,7 +60,7 @@ suite('broadcast ', function() {
                 }
                 gun.get('message').map().on(function(message, id){
                     if(message) {
-                        assert.equal(`${message}\n`, PGPMessageArmor);
+                        assert.equal(`${message}`, `${PGPMessageArmor}`);
                         resolve()
                     }
                 });

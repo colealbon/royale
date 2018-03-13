@@ -1,12 +1,13 @@
 'use strict';
+let memoize = require('memoizee');
 
 import notEmpty from '../../src/lib/notEmpty.js';
-export default function notPGPPubkey(content) {
-    return (!content) ?
-    () => notEmpty(content):
-    (openpgp) => {
-        return (!openpgp) ?
-        Promise.reject(new Error('missing openpgp')):
+let slow_notPGPPubkey = function (openpgp) {
+    return (!openpgp) ?
+    Promise.reject(new Error('missing openpgp')):
+    (content) => {
+        return (!content) ?
+        notEmpty(content):
         new Promise((resolve, reject) => {
             try {
                 let pgpKey = openpgp.key.readArmored(content).keys[0];
@@ -22,3 +23,6 @@ export default function notPGPPubkey(content) {
         });
     }
 };
+
+let notPGPPubkey = memoize(slow_notPGPPubkey, { promise: true });
+export default notPGPPubkey;

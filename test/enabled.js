@@ -16,6 +16,7 @@ require('./lib/notPGPKey.js');
 require('./lib/notPGPPrivkey.js');
 require('./lib/notPGPPubkey.js');
 require('./lib/notUndefined.js');
+require('./lib/notPGPMessage.js');
 
 require('./app/index.js');
 require('./app/message.js');

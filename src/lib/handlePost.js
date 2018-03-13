@@ -23,14 +23,11 @@ export function handlePost(content) {
                     return new Promise((resolve, reject) => {
                         determineContentType(openpgp)(content)
                         .then(contentType => {
-                            console.log('contentType: ', contentType)
                             if (contentType === CLEARTEXT) {
                                 encryptCleartextMulti(openpgp)(localStorage)(content)
                                 .then((encrypted) => {
-                                    console.log('encrypted:', encrypted)
                                     broadcastMulti(openpgp)(gundb)(encrypted)
                                     .then((result) => {
-                                        console.log('broadcastMulti:', result);
                                         resolve(result);
                                     })
                                     .catch((error) => reject(error));
@@ -44,7 +41,6 @@ export function handlePost(content) {
                             if (contentType === PGPPUBKEY) {
                                 savePGPPubkey(openpgp)(localStorage)(content)
                                 .then(result => {
-                                    console.log(result);
                                     resolve(result)
                                 })
                             }
